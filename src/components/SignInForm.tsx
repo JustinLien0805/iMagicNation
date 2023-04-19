@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 type FormData = {
   email: string;
   password: string;
@@ -9,15 +10,28 @@ type FormData = {
 const SignInForm = () => {
   const router = useRouter();
   const { register, handleSubmit } = useForm<FormData>();
-  const onSubmit = (data: FormData) => {
-    
-    // router.push("/home");
+
+  const fetchUser = async () => {
+    const data = await axios.get(
+      "https://imagicnation-production.up.railway.app/user?token=Base64(sha256)"
+    );
+    return data;
   };
+
+  const { data, refetch } = useQuery(["user"], fetchUser, {
+    enabled: false,
+  });
+
+  const onSubmit = handleSubmit((formData: FormData) => {
+    refetch();
+    console.log(data);
+    router.push("/home");
+  });
 
   return (
     <div className="flex w-full max-w-lg flex-col items-center justify-center space-y-4 pt-20 sm:w-3/4">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={onSubmit}
         className="flex w-full flex-col items-center justify-center space-y-4"
       >
         <div className="flex h-48 w-full flex-col items-center gap-4 rounded-lg bg-[#412C2B] p-8">
