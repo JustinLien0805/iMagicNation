@@ -33,7 +33,12 @@ const CategoryRow = ({ type, books }: CategoryRowProps) => {
       <h2>{type}</h2>
       <div className="flex items-center gap-4 overflow-x-scroll">
         {books.map((book) => (
-          <div className="flex cursor-pointer flex-col items-center">
+          <div
+            className="flex cursor-pointer flex-col items-center"
+            onClick={() => {
+              router.push(`/library/book/${book.storyId}`);
+            }}
+          >
             <img src={StorybookIcon.src} alt="" className="h-28" />
             <p>{book.title}</p>
           </div>
