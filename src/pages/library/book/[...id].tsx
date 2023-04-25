@@ -26,6 +26,21 @@ interface ChatMessage {
   message: Message[];
 }
 
+const ChatComponent = ({ message }: { message: Message }) => {
+  return (
+    <>
+      <div className="min-h-40 flex w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
+        <img src={SystemJewel.src} className="h-8 w-8" alt="" />
+        <p className="text-xl font-bold">{message.chatGPTResponse.content}</p>
+      </div>
+      <div className="flex h-40 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
+        <img src={UserJewel.src} className="h-8 w-8" alt="" />
+        <p className="text-xl font-bold">{message.message}</p>
+      </div>
+    </>
+  );
+};
+
 const Book = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -41,7 +56,6 @@ const Book = () => {
   );
   if (isLoading) return <div>loading...</div>;
   if (isError) return <div>error...</div>;
-  console.log(data);
   return (
     <div
       className="flex h-screen flex-col justify-start gap-4 bg-[#411A08]"
@@ -62,41 +76,21 @@ const Book = () => {
           }}
         />
       </div>
-      <div className="flex flex-col items-center justify-center p-10 gap-4">
+      <div className="flex flex-col items-center justify-center gap-4 p-10">
         <div className="flex gap-8 rounded-lg border-4 border-[#EAA916]  bg-[#411A08] p-10">
           <div className="mx-auto flex h-96 w-96 snap-x snap-mandatory overflow-scroll rounded-lg">
-            <img className="flex h-96 w-96 flex-shrink-0 snap-start items-center justify-center bg-amber-200 text-8xl" />
-            <img className="flex h-96 w-96 flex-shrink-0 snap-start items-center justify-center bg-amber-200 text-8xl" />
-            <img className="flex h-96 w-96 flex-shrink-0 snap-start items-center justify-center bg-amber-200 text-8xl" />
-            <img className="flex h-96 w-96 flex-shrink-0 snap-start items-center justify-center bg-amber-200 text-8xl" />
+            <img className="flex h-96 w-96 flex-shrink-0 snap-start bg-amber-200" />
+            {/* {data.message.map((item) => (
+              <img
+                className="flex h-96 w-96 flex-shrink-0 snap-start bg-amber-200"
+                src={item.image}
+              />
+            ))} */}
           </div>
           <div className="flex h-96 flex-1 flex-col gap-4 overflow-y-scroll">
-            <div className="flex h-40 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
-              <img src={SystemJewel.src} className="h-8 w-8" alt="" />
-              <p className="text-xl font-bold">
-                清晨的陽光灑落，奶奶在花園裡種花，弟弟也陪著她一起澆水，兩個人看起來好開心
-                兩個人看起來好開心 。
-              </p>
-            </div>
-            <div className="flex h-40 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
-              <img src={UserJewel.src} className="h-8 w-8" alt="" />
-              <p className="text-xl font-bold">
-                奶奶為什麼要種花呢？奶奶種了什麼花呢？
-              </p>
-            </div>
-            <div className="flex h-40 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
-              <img src={SystemJewel.src} className="h-8 w-8" alt="" />
-              <p className="text-xl font-bold">
-                清晨的陽光灑落，奶奶在花園裡種花，弟弟也陪著她一起澆水，兩個人看起來好開心
-                兩個人看起來好開心 。
-              </p>
-            </div>
-            <div className="flex h-40 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
-              <img src={UserJewel.src} className="h-8 w-8" alt="" />
-              <p className="text-xl font-bold">
-                奶奶為什麼要種花呢？奶奶種了什麼花呢？
-              </p>
-            </div>
+            {data.message.map((item, id) => (
+              <ChatComponent message={item} key={id} />
+            ))}
           </div>
         </div>
         <div className="flex h-20 w-full items-center rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-2">
