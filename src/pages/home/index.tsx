@@ -21,8 +21,16 @@ const home = () => {
         className="absolute left-4 top-4 h-20"
       />
       <div className="absolute right-4 top-4 flex flex-col">
-        <img src={ClassIcon.src} alt="ClassIcon" className="h-32" />
-        <img src={LibraryIcon.src} alt="LibraryIcon" className="h-32" />
+        <div>
+          <img src={ClassIcon.src} alt="ClassIcon" className="h-32" />
+        </div>
+        <div
+          onClick={() => {
+            router.push("/library");
+          }}
+        >
+          <img src={LibraryIcon.src} alt="LibraryIcon" className="h-32" />
+        </div>
       </div>
       <label htmlFor="my-modal-4" className="btn absolute left-[15%] top-1/2">
         素養1

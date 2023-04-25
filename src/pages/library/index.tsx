@@ -2,8 +2,42 @@ import titleImage from "@/assets/iMagicNationIcon.png";
 import CategoryRow from "@/components/CategoryRow";
 import activeTab from "@/assets/activeTab.png";
 import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+interface Book {
+  storyId: string;
+  title: string;
+  resource: {
+    type: string;
+    letters: string[];
+    words: string[];
+    phrases: string[];
+    meaning: string;
+  };
+  initDialog?: string;
+  initialDialog?: string;
+  initImage?: {
+    default: string;
+  };
+  image?: {
+    default: string;
+  };
+  remainCount: number;
+}
 const MyList = () => {
   const router = useRouter();
+  const fetchList = async () => {
+    const data = await axios.get(
+      "https://imagicnation-production.up.railway.app/story/list"
+    );
+    return data.data.list;
+  };
+  const { data } = useQuery<Book[]>(["storyList"], fetchList);
+  if (!data) return <div>loading...</div>;
+  console.log(data);
+  const uniqueTypes = [...new Set(data.map((item) => item.resource.type))];
+
   return (
     <>
       <div
@@ -32,11 +66,10 @@ const MyList = () => {
             backgroundRepeat: "no-repeat",
           }}
         >
-          <CategoryRow name="我的故事" />
-          <CategoryRow name="我的故事" />
-          <CategoryRow name="我的故事" />
-          <CategoryRow name="我的故事" />
-          <CategoryRow name="我的故事" />
+          {uniqueTypes.map((type) => {
+            const books = data.filter((item) => item.resource.type === type);
+            return <CategoryRow key={type} type={type} books={books} />;
+          })}
         </div>
       </div>
     </>
