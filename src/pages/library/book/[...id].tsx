@@ -90,9 +90,9 @@ const Book = () => {
       },
       {
         headers: {
-          apiKey: "S_202304140629871681424970",
-          secret: "7CEB8CF4BBAD69F6B67889B90F6474BAF542B4AD",
-          Bearer: "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",
+          apiKey: process.env.API_KEY,
+          secret: process.env.SECRET_KEY,
+          Bearer: process.env.BEARER_KEY,
         },
       }
     );
