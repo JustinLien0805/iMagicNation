@@ -1,11 +1,11 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import UserJewel from "@/assets/UserJewel.png";
 import SystemJewel from "@/assets/SystemJewel.png";
 import titleImage from "@/assets/iMagicNationIcon.png";
 import activeTab from "@/assets/activeTab.png";
 import { useRouter } from "next/router";
-
+import { useForm } from "react-hook-form";
 interface Message {
   message: string;
   remainCount: string;
@@ -43,6 +43,10 @@ interface Story {
   remainCount: number;
 }
 
+interface FormInput {
+  message: string;
+}
+
 const ChatComponent = ({ message }: { message: Message }) => {
   return (
     <>
@@ -61,6 +65,8 @@ const ChatComponent = ({ message }: { message: Message }) => {
 const Book = () => {
   const router = useRouter();
   const { id } = router.query;
+  const queryClient = useQueryClient();
+
   const fetchChatMessage = async (): Promise<ChatMessage> => {
     const data = await axios.get(
       "https://imagicnation-production.up.railway.app/story/progress"
@@ -73,8 +79,36 @@ const Book = () => {
     );
     return initialData.data;
   };
+  const sendMessage = async (data: FormInput) => {
+    const response = await axios.post(
+      "https://imagicnation-production.up.railway.app/story/user/reply",
+      {
+        storyId: "1",
+        userId: "1",
+        reply: data.message,
+        timestamp: "1682410228",
+      },
+      {
+        headers: {
+          apiKey: "S_202304140629871681424970",
+          secret: "7CEB8CF4BBAD69F6B67889B90F6474BAF542B4AD",
+          Bearer: "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",
+        },
+      }
+    );
+    console.log(response);
+    return response.data;
+  };
+
   const { data } = useQuery(["ChatMessage", id], fetchChatMessage);
   const { data: initialData } = useQuery(["story", id], fetchInitialData);
+
+  const { register, handleSubmit } = useForm<FormInput>();
+  const { mutate, isLoading } = useMutation(sendMessage, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["ChatMessage", id]);
+    },
+  });
 
   return (
     <div
@@ -121,10 +155,23 @@ const Book = () => {
             ))}
           </div>
         </div>
-        <div className="flex h-20 w-full items-center rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-2">
-          <input type="text" className="h-full flex-1 bg-transparent" />
-          <button className="btn border-4 border-[#EAA916]">send</button>
-        </div>
+        <form
+          onSubmit={handleSubmit((data: FormInput) => {
+            mutate(data);
+          })}
+          className="w-full"
+        >
+          <div className="flex h-20 w-full items-center rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-2">
+            <input
+              type="text"
+              className="h-full flex-1 bg-transparent text-3xl"
+              {...register("message", { required: true })}
+            />
+            <button type="submit" className="btn border-4 border-[#EAA916]">
+              send
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
