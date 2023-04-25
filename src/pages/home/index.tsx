@@ -1,7 +1,8 @@
 import { useState } from "react";
 import MainBg from "@/assets/主頁面背景圖.png";
+import { useRouter } from "next/router";
 const home = () => {
-  const [overlay, setOverlay] = useState(true);
+  const router = useRouter();
   return (
     <div
       className="relative flex h-screen w-screen"
@@ -27,9 +28,14 @@ const home = () => {
       >
         素養4
       </label>
-      <button className="btn absolute left-1/2 top-1/2">創造</button>
+      <button
+        className="btn absolute left-1/2 top-1/2"
+        onClick={() => router.push("/library/create")}
+      >
+        library
+      </button>
       <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-      <label htmlFor="my-modal-4" className="modal cursor-pointer">
+      <label htmlFor="my-modal-4" className="modal bg-white/60 cursor-pointer">
         <label className="modal-box relative" htmlFor="">
           <h3 className="text-lg font-bold">
             Congratulations random Internet user!
