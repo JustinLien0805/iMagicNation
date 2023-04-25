@@ -1,6 +1,6 @@
 import StorybookIcon from "@/assets/StorybookIcon.png";
 import { useRouter } from "next/router";
-interface Book {
+interface Story {
   storyId: string;
   title: string;
   resource: {
@@ -10,12 +10,8 @@ interface Book {
     phrases: string[];
     meaning: string;
   };
-  initDialog?: string;
-  initialDialog?: string;
-  initImage?: {
-    default: string;
-  };
-  image?: {
+  initialDialog: string;
+  image: {
     default: string;
   };
   remainCount: number;
@@ -23,24 +19,24 @@ interface Book {
 
 type CategoryRowProps = {
   type: string;
-  books: Book[];
+  storys: Story[];
 };
 
-const CategoryRow = ({ type, books }: CategoryRowProps) => {
+const CategoryRow = ({ type, storys }: CategoryRowProps) => {
   const router = useRouter();
   return (
     <div className="w-full rounded-lg border-2 border-[#EAA916] bg-[#411A08] p-4 text-white">
       <h2>{type}</h2>
       <div className="flex items-center gap-4 overflow-x-scroll">
-        {books.map((book) => (
+        {storys.map((story) => (
           <div
             className="flex cursor-pointer flex-col items-center"
             onClick={() => {
-              router.push(`/library/book/${book.storyId}`);
+              router.push(`/library/book/${story.storyId}`);
             }}
           >
             <img src={StorybookIcon.src} alt="" className="h-28" />
-            <p>{book.title}</p>
+            <p>{story.title}</p>
           </div>
         ))}
       </div>

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-interface Book {
+interface Story {
   storyId: string;
   title: string;
   resource: {
@@ -15,12 +15,8 @@ interface Book {
     phrases: string[];
     meaning: string;
   };
-  initDialog?: string;
-  initialDialog?: string;
-  initImage?: {
-    default: string;
-  };
-  image?: {
+  initialDialog: string;
+  image: {
     default: string;
   };
   remainCount: number;
@@ -33,7 +29,7 @@ const MyList = () => {
     );
     return data.data.list;
   };
-  const { data } = useQuery<Book[]>(["storyList"], fetchList);
+  const { data } = useQuery<Story[]>(["storyList"], fetchList);
   if (!data) return <div>loading...</div>;
   console.log(data);
   const uniqueTypes = [...new Set(data.map((item) => item.resource.type))];
@@ -66,9 +62,9 @@ const MyList = () => {
             backgroundRepeat: "no-repeat",
           }}
         >
-          {uniqueTypes.map((type) => {
-            const books = data.filter((item) => item.resource.type === type);
-            return <CategoryRow key={type} type={type} books={books} />;
+          {uniqueTypes.map((type, id) => {
+            const Storys = data.filter((item) => item.resource.type === type);
+            return <CategoryRow key={id} type={type} storys={Storys} />;
           })}
         </div>
       </div>
