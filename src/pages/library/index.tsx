@@ -22,7 +22,6 @@ const MyList = () => {
               router.push("/home");
             }}
           />
-          <button className="btn">Add</button>
         </div>
         <div
           className="flex w-screen grow flex-col gap-8 p-8"

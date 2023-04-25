@@ -1,4 +1,6 @@
-import { useState } from "react";
+import iMagicNationIcon from "@/assets/iMagicNationIcon.png";
+import LibraryIcon from "@/assets/LibraryIcon.png";
+import ClassIcon from "@/assets/ClassIcon.png";
 import MainBg from "@/assets/主頁面背景圖.png";
 import { useRouter } from "next/router";
 const home = () => {
@@ -13,6 +15,15 @@ const home = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
+      <img
+        src={iMagicNationIcon.src}
+        alt="iMagicNationIcon"
+        className="absolute left-4 top-4 h-20"
+      />
+      <div className="absolute right-4 top-4 flex flex-col">
+        <img src={ClassIcon.src} alt="ClassIcon" className="h-32" />
+        <img src={LibraryIcon.src} alt="LibraryIcon" className="h-32" />
+      </div>
       <label htmlFor="my-modal-4" className="btn absolute left-[15%] top-1/2">
         素養1
       </label>
@@ -32,10 +43,10 @@ const home = () => {
         className="btn absolute left-1/2 top-1/2"
         onClick={() => router.push("/library/create")}
       >
-        library
+        create
       </button>
       <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-      <label htmlFor="my-modal-4" className="modal bg-white/60 cursor-pointer">
+      <label htmlFor="my-modal-4" className="modal cursor-pointer bg-white/60">
         <label className="modal-box relative" htmlFor="">
           <h3 className="text-lg font-bold">
             Congratulations random Internet user!
