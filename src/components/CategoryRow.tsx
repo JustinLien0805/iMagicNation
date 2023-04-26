@@ -1,20 +1,17 @@
 import StorybookIcon from "@/assets/StorybookIcon.png";
 import { useRouter } from "next/router";
 interface Story {
+  id: number;
+  initDialog: string;
+  initImage: string;
+  letters: string;
+  meaning: string;
+  phrases: string;
+  remainCount: number;
   storyId: string;
   title: string;
-  resource: {
-    type: string;
-    letters: string[];
-    words: string[];
-    phrases: string[];
-    meaning: string;
-  };
-  initialDialog: string;
-  image: {
-    default: string;
-  };
-  remainCount: number;
+  type: string;
+  words: string;
 }
 
 type CategoryRowProps = {
