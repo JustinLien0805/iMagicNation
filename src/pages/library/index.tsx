@@ -6,33 +6,30 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 interface Story {
+  id: number;
+  initDialog: string;
+  initImage: string;
+  letters: string;
+  meaning: string;
+  phrases: string;
+  remainCount: number;
   storyId: string;
   title: string;
-  resource: {
-    type: string;
-    letters: string[];
-    words: string[];
-    phrases: string[];
-    meaning: string;
-  };
-  initialDialog: string;
-  image: {
-    default: string;
-  };
-  remainCount: number;
+  type: string;
+  words: string;
 }
-const MyList = () => {
+const Library = () => {
   const router = useRouter();
-  const fetchList = async () => {
-    const data = await axios.get(
-      "https://imagicnation-production.up.railway.app/story/list"
+  const fetchList = async (): Promise<Story[]> => {
+    const data: { data: Story[] } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/story/list`
     );
-    return data.data.list;
+    return data.data;
   };
-  const { data } = useQuery<Story[]>(["storyList"], fetchList);
+  const { data } = useQuery(["storyList"], fetchList);
   if (!data) return <div>loading...</div>;
   console.log(data);
-  const uniqueTypes = [...new Set(data.map((item) => item.resource.type))];
+  const uniqueTypes = [...new Set(data.map((item) => item.type))];
 
   return (
     <>
@@ -62,9 +59,9 @@ const MyList = () => {
             backgroundRepeat: "no-repeat",
           }}
         >
-          {uniqueTypes.map((type, id) => {
-            const Storys = data.filter((item) => item.resource.type === type);
-            return <CategoryRow key={id} type={type} storys={Storys} />;
+          {uniqueTypes.map((type, index) => {
+            const Storys = data.filter((item) => item.type === type);
+            return <CategoryRow key={index} type={type} storys={Storys} />;
           })}
         </div>
       </div>
@@ -72,4 +69,4 @@ const MyList = () => {
   );
 };
 
-export default MyList;
+export default Library;

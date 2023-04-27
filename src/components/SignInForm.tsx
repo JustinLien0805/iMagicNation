@@ -13,7 +13,7 @@ const SignInForm = () => {
 
   const fetchUser = async () => {
     const data = await axios.get(
-      "https://imagicnation-production.up.railway.app/user?token=Base64(sha256)"
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/user?token=Base64(sha256)`
     );
     return data;
   };
@@ -24,7 +24,6 @@ const SignInForm = () => {
 
   const onSubmit = handleSubmit((formData: FormData) => {
     refetch();
-    console.log(data);
     router.push("/home");
   });
 

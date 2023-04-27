@@ -7,12 +7,11 @@ import activeTab from "@/assets/activeTab.png";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 interface Message {
-  message: string;
+  reply: string;
   remainCount: string;
   title: string;
   userId: string;
-  chatGPTResponse: {
-    role: string;
+  chatgptResponse: {
     content: string;
   };
   image: string;
@@ -23,23 +22,20 @@ interface ChatMessage {
   userId: string;
   storyId: string;
   remainCount: string;
-  message: Message[];
+  message?: Message[];
 }
 
 interface Story {
+  id: number;
   storyId: string;
   title: string;
-  resource: {
-    type: string;
-    letters: string[];
-    words: string[];
-    phrases: string[];
-    meaning: string;
-  };
-  initialDialog: string;
-  image: {
-    default: string;
-  };
+  type: string;
+  letters: string[];
+  words: string[];
+  phrases: string[];
+  meaning: string;
+  initDialog: string;
+  initImage: string;
   remainCount: number;
 }
 
@@ -52,11 +48,11 @@ const ChatComponent = ({ message }: { message: Message }) => {
     <>
       <div className="flex h-40 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
         <img src={UserJewel.src} className="h-8 w-8" alt="" />
-        <p className="text-xl font-bold">{message.message}</p>
+        <p className="text-xl font-bold">{message.reply}</p>
       </div>
       <div className="min-h-40 flex w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
         <img src={SystemJewel.src} className="h-8 w-8" alt="" />
-        <p className="text-xl font-bold">{message.chatGPTResponse.content}</p>
+        <p className="text-xl font-bold">{message.chatgptResponse.content}</p>
       </div>
     </>
   );
@@ -65,48 +61,61 @@ const ChatComponent = ({ message }: { message: Message }) => {
 const Book = () => {
   const router = useRouter();
   const { id } = router.query;
+  const idString = Array.isArray(id) ? id[0] : id;
   const queryClient = useQueryClient();
 
   const fetchChatMessage = async (): Promise<ChatMessage> => {
     const data = await axios.get(
-      "https://imagicnation-production.up.railway.app/story/progress"
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/story/progress`,
+      {
+        params: {
+          userId: "1",
+          storyId: idString,
+        },
+      }
     );
     return data.data;
   };
   const fetchInitialData = async (): Promise<Story> => {
     const initialData = await axios.get(
-      "https://imagicnation-production.up.railway.app/story/one"
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/story/one`,
+      {
+        params: {
+          storyId: idString,
+        },
+      }
     );
-    return initialData.data;
+    return initialData.data[0];
   };
   const sendMessage = async (data: FormInput) => {
+    console.log("sending");
     const response = await axios.post(
-      "https://imagicnation-production.up.railway.app/story/user/reply",
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/story/user/reply`,
       {
-        storyId: "1",
+        storyId: idString,
         userId: "1",
         reply: data.message,
         timestamp: "1682410228",
       },
       {
         headers: {
-          apiKey: process.env.API_KEY,
-          secret: process.env.SECRET_KEY,
-          Bearer: process.env.BEARER_KEY,
+          apiKey: process.env.NEXT_PUBLIC_API_KEY,
+          secret: process.env.NEXT_PUBLIC_SECRET_KEY,
+          Bearer: process.env.NEXT_PUBLIC_BEARER_KEY,
         },
       }
     );
-    console.log(response);
+
     return response.data;
   };
 
   const { data } = useQuery(["ChatMessage", id], fetchChatMessage);
   const { data: initialData } = useQuery(["story", id], fetchInitialData);
-
-  const { register, handleSubmit } = useForm<FormInput>();
+  const { register, handleSubmit, reset } = useForm<FormInput>();
   const { mutate, isLoading } = useMutation(sendMessage, {
     onSuccess: () => {
       queryClient.invalidateQueries(["ChatMessage", id]);
+      reset();
     },
   });
 
@@ -135,11 +144,11 @@ const Book = () => {
           <div className="mx-auto flex h-96 w-96 snap-x snap-mandatory overflow-scroll rounded-lg">
             <img
               className="flex h-96 w-96 flex-shrink-0 snap-start bg-amber-200 object-cover"
-              src={initialData?.image?.default}
+              src={initialData?.initImage}
             />
-            {data?.message.map((item, id) => (
+            {data?.message?.map((item, index) => (
               <img
-                key={id}
+                key={index}
                 className="flex h-96 w-96 flex-shrink-0 snap-start bg-amber-200 object-cover"
                 src={item.image}
               />
@@ -148,9 +157,9 @@ const Book = () => {
           <div className="flex h-96 flex-1 flex-col gap-4 overflow-y-scroll">
             <div className="min-h-40 flex w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
               <img src={SystemJewel.src} className="h-8 w-8" alt="" />
-              <p className="text-xl font-bold">{initialData?.initialDialog}</p>
+              <p className="text-xl font-bold">{initialData?.initDialog}</p>
             </div>
-            {data?.message.map((item, id) => (
+            {data?.message?.map((item, id) => (
               <ChatComponent message={item} key={id} />
             ))}
           </div>
