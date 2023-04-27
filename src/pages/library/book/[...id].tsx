@@ -22,23 +22,20 @@ interface ChatMessage {
   userId: string;
   storyId: string;
   remainCount: string;
-  message: Message[];
+  message?: Message[];
 }
 
 interface Story {
+  id: number;
   storyId: string;
   title: string;
-  resource: {
-    type: string;
-    letters: string[];
-    words: string[];
-    phrases: string[];
-    meaning: string;
-  };
-  initialDialog: string;
-  image: {
-    default: string;
-  };
+  type: string;
+  letters: string[];
+  words: string[];
+  phrases: string[];
+  meaning: string;
+  initDialog: string;
+  initImage: string;
   remainCount: number;
 }
 
@@ -64,7 +61,7 @@ const ChatComponent = ({ message }: { message: Message }) => {
 const Book = () => {
   const router = useRouter();
   const { id } = router.query;
-  console.log(id);
+  const idString = Array.isArray(id) ? id[0] : id;
   const queryClient = useQueryClient();
 
   const fetchChatMessage = async (): Promise<ChatMessage> => {
@@ -73,7 +70,7 @@ const Book = () => {
       {
         params: {
           userId: "1",
-          storyId: id,
+          storyId: idString,
         },
       }
     );
@@ -84,18 +81,18 @@ const Book = () => {
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/story/one`,
       {
         params: {
-          storyId: id,
+          storyId: idString,
         },
       }
     );
-    return initialData.data;
+    return initialData.data[0];
   };
   const sendMessage = async (data: FormInput) => {
     console.log("sending");
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/story/user/reply`,
       {
-        storyId: id,
+        storyId: idString,
         userId: "1",
         reply: data.message,
         timestamp: "1682410228",
@@ -113,9 +110,7 @@ const Book = () => {
   };
 
   const { data } = useQuery(["ChatMessage", id], fetchChatMessage);
-  console.log(data);
   const { data: initialData } = useQuery(["story", id], fetchInitialData);
-
   const { register, handleSubmit, reset } = useForm<FormInput>();
   const { mutate, isLoading } = useMutation(sendMessage, {
     onSuccess: () => {
@@ -149,9 +144,9 @@ const Book = () => {
           <div className="mx-auto flex h-96 w-96 snap-x snap-mandatory overflow-scroll rounded-lg">
             <img
               className="flex h-96 w-96 flex-shrink-0 snap-start bg-amber-200 object-cover"
-              src={initialData?.image?.default}
+              src={initialData?.initImage}
             />
-            {data?.message.map((item, index) => (
+            {data?.message?.map((item, index) => (
               <img
                 key={index}
                 className="flex h-96 w-96 flex-shrink-0 snap-start bg-amber-200 object-cover"
@@ -162,9 +157,9 @@ const Book = () => {
           <div className="flex h-96 flex-1 flex-col gap-4 overflow-y-scroll">
             <div className="min-h-40 flex w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
               <img src={SystemJewel.src} className="h-8 w-8" alt="" />
-              <p className="text-xl font-bold">{initialData?.initialDialog}</p>
+              <p className="text-xl font-bold">{initialData?.initDialog}</p>
             </div>
-            {data?.message.map((item, id) => (
+            {data?.message?.map((item, id) => (
               <ChatComponent message={item} key={id} />
             ))}
           </div>

@@ -24,7 +24,6 @@ const SignInForm = () => {
 
   const onSubmit = handleSubmit((formData: FormData) => {
     refetch();
-    console.log(data);
     router.push("/home");
   });
 
