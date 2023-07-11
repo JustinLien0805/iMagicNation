@@ -19,15 +19,10 @@ const formSchema = z.object({
   password: z.string().min(8, "密碼長度至少8個字"),
 });
 
-type FormData = {
-  email: string;
-  password: string;
-};
-
 const SignInForm = () => {
   const router = useRouter();
 
-  const signIn = async (formData: FormData) => {
+  const signIn = async (formData: z.infer<typeof formSchema>) => {
     const { data } = await axios.get(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/user`,
       {
@@ -106,6 +101,9 @@ const SignInForm = () => {
             type="button"
             asChild
             className="h-16 grow border-4 border-[#A38984] bg-[#261920] text-white"
+            onClick={() => {
+              router.push("/home");
+            }}
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
