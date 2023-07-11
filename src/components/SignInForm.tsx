@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 type FormData = {
   email: string;
   password: string;
@@ -11,20 +11,25 @@ const SignInForm = () => {
   const router = useRouter();
   const { register, handleSubmit } = useForm<FormData>();
 
-  const fetchUser = async () => {
-    const data = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/user?token=Base64(sha256)`
-    );
+  const signIn = async (formData: FormData) => {
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user`, {
+      params:{
+        userId: formData.password
+      }
+    });
     return data;
   };
 
-  const { data, refetch } = useQuery(["user"], fetchUser, {
-    enabled: false,
+  const { mutate } = useMutation(signIn, {
+    onSuccess: (data) => {
+      if (data) {
+        router.push("/home");
+      }
+    },
   });
 
   const onSubmit = handleSubmit((formData: FormData) => {
-    refetch();
-    router.push("/home");
+    mutate(formData)
   });
 
   return (
