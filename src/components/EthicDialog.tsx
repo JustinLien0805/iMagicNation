@@ -5,6 +5,8 @@ import Continent4 from "@/assets/大陸4.png";
 import Continent5 from "@/assets/大陸5.png";
 import IMagicNationIcon from "@/assets/iMagicNationIcon.png";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/router";
+
 import {
   Dialog,
   DialogHeader,
@@ -80,7 +82,7 @@ const EthicDialog = ({
                 {name}
               </DialogTitle>
             </DialogHeader>
-            <img src={imgSrc} alt="" className="h-96" />
+            <img src={imgSrc} alt="" className="max-h-96" />
           </div>
           <section className="grid h-full grow grid-cols-2 gap-4 p-20">
             {stages.map((stage) => (
