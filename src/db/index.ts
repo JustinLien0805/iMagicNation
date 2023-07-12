@@ -4,7 +4,7 @@ import { drizzle } from "drizzle-orm/planetscale-serverless";
 import * as schema from "./schema";
 
 const connection = connect({
-  url: process.env.PLANETSCALE_DATABASE_URL ?? "",
+  url: process.env.PLANETSCALE_DATABASE_URL || "",
 });
 
 export const db = drizzle(connection, { schema });
