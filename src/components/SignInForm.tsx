@@ -14,6 +14,9 @@ import { Input } from "@/components/ui/input";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+
 const formSchema = z.object({
   email: z.string().email("請輸入正確的電子郵件格式"),
   password: z.string().min(8, "密碼長度至少8個字"),
@@ -25,6 +28,7 @@ const SignInForm = ({
   setIsRegister: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
+  const { toast } = useToast();
 
   const signIn = async (formData: z.infer<typeof formSchema>) => {
     const { data } = await axios.get(
@@ -43,6 +47,14 @@ const SignInForm = ({
       if (data) {
         router.push("/home");
       }
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
   });
 
@@ -67,7 +79,6 @@ const SignInForm = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
- 
       >
         <div className="flex w-full flex-col items-center gap-4 rounded-lg bg-[#412C2B] p-8">
           <FormField

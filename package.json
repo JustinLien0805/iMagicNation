@@ -6,10 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate:mysql",
+    "db:introspect": "drizzle-kit introspect:mysql",
+    "db:push": "drizzle-kit push:mysql",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
+    "@planetscale/database": "^1.8.0",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
@@ -24,6 +29,8 @@
     "class-variance-authority": "^0.6.1",
     "clsx": "^1.2.1",
     "daisyui": "^2.51.5",
+    "dotenv": "^16.3.1",
+    "drizzle-orm": "^0.27.2",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
     "framer-motion": "^10.12.18",
@@ -40,6 +47,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "drizzle-kit": "^0.19.4",
     "prettier": "^2.8.7",
     "prettier-plugin-tailwindcss": "^0.2.7"
   }
