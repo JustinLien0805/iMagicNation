@@ -19,7 +19,11 @@ const formSchema = z.object({
   password: z.string().min(8, "密碼長度至少8個字"),
 });
 
-const SignInForm = () => {
+const SignInForm = ({
+  setIsRegister,
+}: {
+  setIsRegister: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const router = useRouter();
 
   const signIn = async (formData: z.infer<typeof formSchema>) => {
@@ -57,9 +61,13 @@ const SignInForm = () => {
 
   return (
     <Form {...form}>
-      <form
+      <motion.form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex w-full max-w-lg flex-col items-center justify-center space-y-4 pt-20 sm:w-3/4"
+        className="flex w-full flex-col items-center justify-center space-y-4 pt-20"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+ 
       >
         <div className="flex w-full flex-col items-center gap-4 rounded-lg bg-[#412C2B] p-8">
           <FormField
@@ -116,6 +124,9 @@ const SignInForm = () => {
             type="submit"
             asChild
             className="h-16 grow border-4 border-[#A38984] bg-[#261920] text-white"
+            onClick={() => {
+              setIsRegister(true);
+            }}
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -128,7 +139,7 @@ const SignInForm = () => {
         <Button type="button" variant="link" className="text-lg text-[#261920]">
           忘記密碼
         </Button>
-      </form>
+      </motion.form>
     </Form>
   );
 };
