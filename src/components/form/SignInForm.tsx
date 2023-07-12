@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import { is } from "drizzle-orm";
 
 const formSchema = z.object({
   email: z.string().email("請輸入正確的電子郵件格式"),
@@ -34,11 +35,22 @@ type SignInRespnse = {
   };
 };
 
+type SignInFormProps = {
+  setIsRegister: React.Dispatch<React.SetStateAction<boolean>>;
+  setUserInfo: React.Dispatch<
+    React.SetStateAction<{
+      email: string;
+      password: string;
+    }>
+  >;
+  isRegister: boolean;
+};
+
 const SignInForm = ({
   setIsRegister,
-}: {
-  setIsRegister: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+  setUserInfo,
+  isRegister,
+}: SignInFormProps) => {
   const router = useRouter();
   const { toast } = useToast();
 
@@ -62,12 +74,6 @@ const SignInForm = ({
         });
       }
       if (data.message === "登入成功") {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: data.message,
-          action: <ToastAction altText="Try again">再試一次！</ToastAction>,
-        });
         router.push("/home");
       }
     },
@@ -90,7 +96,8 @@ const SignInForm = ({
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    signInMutate.mutate(values);
+    if (!isRegister) signInMutate.mutate(values);
+    console.log(isRegister);
   }
 
   return (
@@ -151,11 +158,15 @@ const SignInForm = ({
             </motion.button>
           </Button>
           <Button
-            type="button"
+            type="submit"
             asChild
             className="h-16 grow border-4 border-[#A38984] bg-[#261920] text-white"
             onClick={() => {
               setIsRegister(true);
+              setUserInfo({
+                email: form.getValues("email"),
+                password: form.getValues("password"),
+              });
             }}
           >
             <motion.button

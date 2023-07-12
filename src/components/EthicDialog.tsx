@@ -87,6 +87,7 @@ const EthicDialog = ({
           <section className="grid h-full grow grid-cols-2 gap-4 p-20">
             {stages.map((stage) => (
               <Button
+                key={stage}
                 className="self-center border-4 border-[#EAA916] px-4 py-6 text-2xl font-semibold text-[#EAA916]"
                 style={{
                   borderRadius: "0.75rem",

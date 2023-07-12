@@ -15,13 +15,23 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 const formSchema = z.object({
   nickname: z.string().min(2, "暱稱長度至少2個字"),
 });
 
-const NicknameForm = () => {
-  const [nickname, setNickname] = useState("");
+const NicknameForm = ({
+  setIsRegister,
+  userInfo,
+}: {
+  setIsRegister: React.Dispatch<React.SetStateAction<boolean>>;
+  userInfo: {
+    email: string;
+    password: string;
+  };
+}) => {
   const router = useRouter();
   const { toast } = useToast();
 
@@ -33,14 +43,49 @@ const NicknameForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    toast({
-      variant: "destructive",
-      title: "Uh oh! Something went wrong.",
-      description: "There was a problem with your request.",
-      action: <ToastAction altText="Try again">Try again</ToastAction>,
-    });
+    signUpMutate.mutate(values);
   }
+
+  const signUp = async (formData: z.infer<typeof formSchema>) => {
+    const { data } = await axios.post("api/user", {
+      email: userInfo.email,
+      password: userInfo.password,
+      nickname: formData.nickname,
+    });
+    console.log(data);
+    return data;
+  };
+
+  const signUpMutate = useMutation(signUp, {
+    onSuccess: (data) => {
+      setIsRegister(false);
+      if (data.message !== "註冊成功") {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: data.message,
+          action: <ToastAction altText="Try again">再試一次！</ToastAction>,
+        });
+      }
+      if (data.message === "註冊成功") {
+        toast({
+          title: "Congratulations! You've signed up successfully",
+          description: data.message,
+          action: <ToastAction altText="Try again">重新登入！</ToastAction>,
+          className: "bg-emerald-500 text-white",
+        });
+        router.push("/home");
+      }
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    },
+  });
 
   return (
     <Form {...form}>
