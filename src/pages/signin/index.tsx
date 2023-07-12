@@ -3,7 +3,7 @@ import titleImage from "@/assets/iMagicNationIcon.png";
 import background from "@/assets/登入註冊頁面背景圖.png";
 import NicknameForm from "@/components/NicknameForm";
 import { Toaster } from "@/components/ui/toaster";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 const SignIn = () => {
   const [isRegister, setIsRegister] = useState(false);

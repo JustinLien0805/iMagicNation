@@ -22,6 +22,18 @@ const formSchema = z.object({
   password: z.string().min(8, "密碼長度至少8個字"),
 });
 
+type SignInRespnse = {
+  message: string;
+  user?: {
+    id: number;
+    userId: string;
+    email: string;
+    password: string;
+    nickname: string;
+    createdAt: Date;
+  };
+};
+
 const SignInForm = ({
   setIsRegister,
 }: {
@@ -31,20 +43,31 @@ const SignInForm = ({
   const { toast } = useToast();
 
   const signIn = async (formData: z.infer<typeof formSchema>) => {
-    const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/user`,
-      {
-        params: {
-          userId: formData.password,
-        },
-      }
-    );
+    const { data }: { data: SignInRespnse } = await axios.post("api/user", {
+      email: formData.email,
+      password: formData.password,
+    });
+    console.log(data);
     return data;
   };
 
-  const { mutate } = useMutation(signIn, {
+  const signInMutate = useMutation(signIn, {
     onSuccess: (data) => {
-      if (data) {
+      if (data.message !== "登入成功") {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: data.message,
+          action: <ToastAction altText="Try again">再試一次！</ToastAction>,
+        });
+      }
+      if (data.message === "登入成功") {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: data.message,
+          action: <ToastAction altText="Try again">再試一次！</ToastAction>,
+        });
         router.push("/home");
       }
     },
@@ -67,15 +90,14 @@ const SignInForm = ({
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    mutate(values);
+    signInMutate.mutate(values);
   }
 
   return (
     <Form {...form}>
       <motion.form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex w-full flex-col items-center justify-center space-y-4 pt-20"
+        className="flex w-full max-w-lg flex-col items-center justify-center space-y-4 pt-20"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -117,12 +139,9 @@ const SignInForm = ({
         </div>
         <div className="flex w-full gap-4">
           <Button
-            type="button"
+            type="submit"
             asChild
             className="h-16 grow border-4 border-[#A38984] bg-[#261920] text-white"
-            onClick={() => {
-              router.push("/home");
-            }}
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -132,7 +151,7 @@ const SignInForm = ({
             </motion.button>
           </Button>
           <Button
-            type="submit"
+            type="button"
             asChild
             className="h-16 grow border-4 border-[#A38984] bg-[#261920] text-white"
             onClick={() => {
