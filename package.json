@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate:mysql",
-    "db:introspect": "drizzle-kit introspect:mysql",
+    "db:pull": "drizzle-kit introspect:mysql",
     "db:push": "drizzle-kit push:mysql",
     "db:studio": "drizzle-kit studio"
   },

@@ -3,7 +3,7 @@ import axios from "axios";
 import UserJewel from "@/assets/UserJewel.png";
 import SystemJewel from "@/assets/SystemJewel.png";
 import titleImage from "@/assets/iMagicNationIcon.png";
-import activeTab from "@/assets/activeTab.png";
+import LibraryBackground from "@/assets/LibraryBackground.png";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 interface Message {
@@ -123,7 +123,7 @@ const Book = () => {
     <div
       className="flex h-screen flex-col justify-start gap-4 bg-[#411A08]"
       style={{
-        backgroundImage: `url(${activeTab.src})`,
+        backgroundImage: `url(${LibraryBackground.src})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

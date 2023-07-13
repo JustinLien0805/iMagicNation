@@ -25,7 +25,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const user = await db.insert(users).values({
-      userId: Date.now().toString(),
       email: email,
       password,
       nickname,

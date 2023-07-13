@@ -1,7 +1,6 @@
 import titleImage from "@/assets/iMagicNationIcon.png";
 import CategoryRow from "@/components/CategoryRow";
 import LibraryBackground from "@/assets/LibraryBackground.png";
-import activeTab from "@/assets/activeTab.png";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
