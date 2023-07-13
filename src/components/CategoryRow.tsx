@@ -1,18 +1,19 @@
 import StorybookIcon from "@/assets/StorybookIcon.png";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
+import { Skeleton } from "@/components/ui/skeleton";
 interface Story {
-  id: number;
-  initDialog: string;
-  initImage: string;
-  letters: string;
-  meaning: string;
-  phrases: string;
-  remainCount: number;
-  storyId: string;
+  id: string;
+  // initDialog: string;
+  // initImage: string;
+  // letters: string;
+  // meaning: string;
+  // phrases: string;
+  // remainCount: number;
+  // storyId: string;
   title: string;
   type: string;
-  words: string;
+  // words: string;
 }
 
 type CategoryRowProps = {
@@ -44,11 +45,11 @@ const CategoryRow = ({ type, storys }: CategoryRowProps) => {
         {storys.map((story) => (
           <motion.div
             className="z-50 flex cursor-pointer flex-col items-center"
-            key={story.storyId}
+            key={story.id}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => {
-              router.push(`/library/book/${story.storyId}`);
+              router.push(`/library/book/${story.id}`);
             }}
           >
             <img src={StorybookIcon.src} alt="" className="h-28" />

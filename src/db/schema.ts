@@ -16,7 +16,7 @@ export const userRelations = relations(users, ({ many }) => ({
 export const stories = mysqlTable("stories", {
   id: serial("id").primaryKey().autoincrement(),
   title: varchar("title", { length: 191 }).notNull(),
-  type: varchar("type", { length: 191 }).default("default"),
+  type: varchar("type", { length: 191 }).default("我的故事"),
   authorId: varchar("authorId", { length: 191 }),
 });
 
