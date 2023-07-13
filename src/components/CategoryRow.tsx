@@ -49,7 +49,7 @@ const CategoryRow = ({ type, storys }: CategoryRowProps) => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => {
-              router.push(`/library/book/${story.id}`);
+              router.push(`/library/abc/${story.id}`);
             }}
           >
             <img src={StorybookIcon.src} alt="" className="h-28" />

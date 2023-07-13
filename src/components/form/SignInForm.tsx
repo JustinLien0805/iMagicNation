@@ -16,7 +16,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
-import { is } from "drizzle-orm";
 
 const formSchema = z.object({
   email: z.string().email("請輸入正確的電子郵件格式"),
