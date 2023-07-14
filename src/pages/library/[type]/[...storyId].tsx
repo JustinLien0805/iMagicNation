@@ -1,11 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import UserJewel from "@/assets/UserJewel.png";
-import SystemJewel from "@/assets/SystemJewel.png";
-import titleImage from "@/assets/iMagicNationIcon.png";
-import LibraryBackground from "@/assets/LibraryBackground.png";
-import SendBtn from "@/assets/SendBtn.png";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,11 +31,15 @@ const ChatComponent = () => {
       />
       <div className="flex w-full flex-col">
         <div className="flex h-40 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
-          <img src={UserJewel.src} className="h-8 w-8" alt="" />
+          <div className="relative h-8 w-8">
+            <Image src={"/UserJewel.png"} fill alt="" />
+          </div>
           <p className="text-2xl font-bold text-[#F6E0C1]">message.reply</p>
         </div>
         <div className="flex h-96 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
-          <img src={SystemJewel.src} className="h-8 w-8" alt="" />
+          <div className="relative h-8 w-8">
+            <Image src={"/SystemJewel.png"} fill alt="" />
+          </div>
           <p className="text-2xl font-bold text-[#F6E0C1]">
             message.chatgptResponse.content
           </p>
@@ -65,14 +65,20 @@ const Story = () => {
     <div
       className="flex h-screen flex-col justify-start gap-4 bg-[#411A08]"
       style={{
-        backgroundImage: `url(${LibraryBackground.src})`,
+        backgroundImage: 'url("/LibraryBackground.png")',
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
     >
       <div className="flex w-full items-center bg-[#411A08] px-10 py-4">
-        <img src={titleImage.src} className="mr-auto h-12" alt="" />
+        <Image
+          src={"/IMagicNationIcon.png"}
+          className="mr-auto"
+          width={420}
+          height={80}
+          alt=""
+        />
       </div>
       <div className="flex flex-col items-center justify-center gap-4 p-10">
         <div className="flex w-full gap-8 rounded-lg border-4 border-[#EAA916]  bg-[#411A08] p-10">
@@ -83,7 +89,9 @@ const Story = () => {
                 src={""}
               />
               <div className="flex w-full gap-4 border-b-2 border-[#EAA916] p-4">
-                <img src={SystemJewel.src} className="h-8 w-8" alt="" />
+                <div className="relative h-8 w-8">
+                  <Image src={"/SystemJewel.png"} fill alt="" />
+                </div>
                 <p className="text-2xl font-bold text-[#F6E0C1]">
                   initialData?.initDialog
                 </p>
@@ -126,7 +134,7 @@ const Story = () => {
                 <motion.button
                   type="submit"
                   style={{
-                    backgroundImage: `url(${SendBtn.src})`,
+                    backgroundImage: 'url("/SendBtn.png")',
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",

@@ -1,10 +1,9 @@
 import SignInForm from "@/components/form/SignInForm";
-import titleImage from "@/assets/iMagicNationIcon.png";
-import background from "@/assets/登入註冊頁面背景圖.png";
 import NicknameForm from "@/components/form/NicknameForm";
 import { Toaster } from "@/components/ui/toaster";
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import Image from "next/image";
 const SignIn = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [userInfo, setUserInfo] = useState({
@@ -15,13 +14,19 @@ const SignIn = () => {
     <div
       className="relative flex h-screen w-screen flex-col items-center justify-center px-4"
       style={{
-        backgroundImage: `url(${background.src})`,
+        backgroundImage: `url('/SignInBackground.png')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <img src={titleImage.src} alt="" className="absolute top-4 scale-75" />
+      <Image
+        src={"/iMagicNationIcon.png"}
+        alt=""
+        className="absolute top-4"
+        width={420}
+        height={80}
+      />
       <AnimatePresence initial={false}>
         {isRegister ? (
           <NicknameForm setIsRegister={setIsRegister} userInfo={userInfo} />

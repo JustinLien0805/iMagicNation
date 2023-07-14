@@ -1,10 +1,10 @@
-import titleImage from "@/assets/iMagicNationIcon.png";
 import CategoryRow from "@/components/CategoryRow";
-import LibraryBackground from "@/assets/LibraryBackground.png";
+
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
 
 interface Story {
   id: string;
@@ -46,9 +46,11 @@ const Library = () => {
     <>
       <div className="flex min-h-screen flex-col gap-8 bg-[#411A08] pt-10">
         <div className="flex items-center px-4">
-          <img
-            src={titleImage.src}
-            className="mr-auto h-12"
+          <Image
+            src={"/iMagicNationIcon.png"}
+            className="mr-auto"
+            width={420}
+            height={80}
             alt=""
             onClick={() => {
               router.push("/home");
@@ -58,7 +60,7 @@ const Library = () => {
         <div
           className="flex w-screen grow flex-col gap-8 p-8"
           style={{
-            backgroundImage: `url(${LibraryBackground.src})`,
+            backgroundImage: 'url("/LibraryBackground.png")',
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
