@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import EthicDialog from "@/components/EthicDialog";
 import Image from "next/image";
-
+import { Toaster } from "@/components/ui/toaster";
 const home = () => {
   const router = useRouter();
   return (
@@ -50,6 +50,7 @@ const home = () => {
         position="absolute bottom-[15%] left-1/2"
       />
       <EthicDialog type="我的故事" position="absolute left-[40%] top-1/2 " />
+      <Toaster />
     </div>
   );
 };

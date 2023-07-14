@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -50,6 +50,7 @@ const ChatComponent = () => {
 };
 
 const Story = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -74,10 +75,13 @@ const Story = () => {
       <div className="flex w-full items-center bg-[#411A08] px-10 py-4">
         <Image
           src={"/IMagicNationIcon.png"}
-          className="mr-auto"
+          className="cursor-pointer"
           width={420}
           height={80}
           alt=""
+          onClick={() => {
+            router.push("/home");
+          }}
         />
       </div>
       <div className="flex flex-col items-center justify-center gap-4 p-10">

@@ -24,7 +24,7 @@ const Library = () => {
   const router = useRouter();
   const fetchList = async (): Promise<Story[]> => {
     const { data }: { data: Story[] } = await axios.post("api/story", {
-      userId: "2",
+      userId: "1",
     });
     return data;
   };
