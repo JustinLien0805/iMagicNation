@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { db } from "@/db/index";
-import { users, stories } from "@/db/schema";
-import { and, eq, isNull, or } from "drizzle-orm";
+import { stories } from "@/db/schema";
+import { eq, isNull, or } from "drizzle-orm";
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,8 +10,14 @@ export default async function handler(
 ) {
   const { userId, title }: { userId: string; title: string } = req.body;
   const { method } = req;
+
+  if (!userId) {
+    return res.status(401).json({ message: "請先登入" });
+  }
   if (method === "POST") {
     console.log(userId);
+
+    // get the user's stories
     if (userId && !title) {
       const story = await db
         .select()
@@ -21,6 +27,8 @@ export default async function handler(
       console.log(story);
       return res.status(200).json(story);
     }
+
+    // create a new story
     if (userId && title) {
       const story = await db.insert(stories).values({
         title,
