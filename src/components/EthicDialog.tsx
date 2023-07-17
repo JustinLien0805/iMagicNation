@@ -105,7 +105,7 @@ const EthicDialog = ({
                   }}
                   asChild
                   onClick={() => {
-                    router.push(`/library/${type}/${index + 1}`);
+                    router.push(`/story/${type}/${index + 1}`);
                   }}
                 >
                   <motion.button

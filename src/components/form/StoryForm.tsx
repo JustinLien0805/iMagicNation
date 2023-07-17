@@ -16,7 +16,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-
+import { useUser } from "@clerk/nextjs";
 const formSchema = z.object({
   storyTitle: z
     .string()
@@ -27,6 +27,7 @@ const formSchema = z.object({
 const StoryForm = () => {
   const router = useRouter();
   const { toast } = useToast();
+  const { user } = useUser();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,7 +42,7 @@ const StoryForm = () => {
 
   const createStroy = async (formData: z.infer<typeof formSchema>) => {
     const { data } = await axios.post("api/story", {
-      userId: "1",
+      userId: user?.id,
       title: formData.storyTitle,
     });
     console.log(data);
@@ -51,6 +52,7 @@ const StoryForm = () => {
   const { mutate, isLoading } = useMutation(createStroy, {
     onSuccess: (data) => {
       console.log(data);
+      router.push(`/story/我的故事/${data.storyId}`);
       toast({
         title: "成功",
         description: data.message,

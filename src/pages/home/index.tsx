@@ -29,7 +29,7 @@ const home = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => {
-            router.push("/library");
+            router.push("/story");
           }}
         >
           <Image src={"/LibraryIcon.png"} alt="LibraryIcon" fill />
