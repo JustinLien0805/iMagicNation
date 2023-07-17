@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import EthicDialog from "@/components/EthicDialog";
 import Image from "next/image";
 import { Toaster } from "@/components/ui/toaster";
+import { motion } from "framer-motion";
+
 const home = () => {
   const router = useRouter();
   return (
@@ -17,21 +19,21 @@ const home = () => {
       <Image
         src={"/iMagicNationIcon.png"}
         alt="iMagicNationIcon"
-        className="absolute left-4 top-4"
+        className="absolute left-4 top-4 cursor-pointer"
         width={420}
         height={80}
       />
       <div className="absolute right-4 top-4 flex flex-col">
-        <div>
-          <img src={"/ClassIcon.png"} alt="ClassIcon" className="h-32" />
-        </div>
-        <div
+        <motion.div
+          className="relative h-32 w-28 cursor-pointer"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => {
             router.push("/library");
           }}
         >
-          <img src={"/LibraryIcon.png"} alt="LibraryIcon" className="h-32" />
-        </div>
+          <Image src={"/LibraryIcon.png"} alt="LibraryIcon" fill />
+        </motion.div>
       </div>
       <EthicDialog
         type="多元文化與國際理解"

@@ -18,7 +18,10 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
 const formSchema = z.object({
-  storyTitle: z.string().min(2, "故事名稱長度至少2個字"),
+  storyTitle: z
+    .string()
+    .min(2, "故事名稱長度至少2個字")
+    .max(20, "故事名稱長度至多20個字"),
 });
 
 const StoryForm = () => {

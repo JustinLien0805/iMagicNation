@@ -19,7 +19,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
-  input: z.string().min(1, "請輸入訊息"),
+  input: z.string().min(1, "請輸入訊息").max(50, "訊息長度至多50個字"),
 });
 
 const ChatComponent = () => {

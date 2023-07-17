@@ -19,7 +19,10 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
 const formSchema = z.object({
-  nickname: z.string().min(2, "暱稱長度至少2個字"),
+  nickname: z
+    .string()
+    .min(2, "暱稱長度至少2個字")
+    .max(10, "暱稱長度至多10個字"),
 });
 
 const NicknameForm = ({
