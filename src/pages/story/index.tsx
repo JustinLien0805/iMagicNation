@@ -29,7 +29,6 @@ const Library = () => {
     return data;
   };
   const { data, isSuccess, isLoading } = useQuery(["storyList"], fetchList);
-  console.log(data);
 
   const uniqueTypes = [...new Set(data?.map((item) => item.type))];
   uniqueTypes.sort((a, b) => {
@@ -41,7 +40,7 @@ const Library = () => {
       return a.localeCompare(b);
     }
   });
-  console.log(uniqueTypes);
+ 
   return (
     <>
       <div className="flex min-h-screen flex-col gap-8 bg-[#411A08] pt-10">

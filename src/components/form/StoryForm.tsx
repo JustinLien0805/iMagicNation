@@ -46,13 +46,12 @@ const StoryForm = () => {
       userId: user?.id,
       title: formData.storyTitle,
     });
-    console.log(data);
+
     return data;
   };
 
   const { mutate, isLoading } = useMutation(createStroy, {
     onSuccess: (data) => {
-      console.log(data);
       router.push(`/story/我的故事/${data.storyId}`);
       toast({
         title: "成功",
@@ -61,7 +60,6 @@ const StoryForm = () => {
       });
     },
     onError: (error) => {
-      console.log(error);
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",

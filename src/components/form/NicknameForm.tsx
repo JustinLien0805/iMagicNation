@@ -55,7 +55,7 @@ const NicknameForm = ({
       password: userInfo.password,
       nickname: formData.nickname,
     });
-    console.log(data);
+
     return data;
   };
 

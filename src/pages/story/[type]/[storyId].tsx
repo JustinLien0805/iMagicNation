@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getAuth } from "@clerk/nextjs/server";
+import { GetServerSideProps } from "next";
 import axios from "axios";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -12,44 +14,38 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Chat from "@/components/Chat";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 
+type Story = {
+  id: number;
+  title: string;
+  type: string;
+  authorId?: string;
+  initDialog?: string;
+  initImageSrc?: string;
+  messages: Message[];
+};
+
+type Message = {
+  storyId: string;
+  id: string;
+  authorId: string;
+  input: string;
+  reply: string;
+  imageSrc: string;
+  createdAt: Date;
+};
+
 const formSchema = z.object({
   input: z.string().min(1, "請輸入訊息").max(50, "訊息長度至多50個字"),
 });
 
-const ChatComponent = () => {
-  return (
-    <div className="flex w-full flex-shrink-0 gap-4">
-      <img
-        className="max-h-96 w-96 flex-shrink-0 rounded-lg bg-amber-200 object-cover"
-        src={""}
-      />
-      <div className="flex w-full flex-col">
-        <div className="flex h-40 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
-          <div className="relative h-8 w-8">
-            <Image src={"/UserJewel.png"} fill alt="" />
-          </div>
-          <p className="text-2xl font-bold text-[#F6E0C1]">message.reply</p>
-        </div>
-        <div className="flex h-96 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
-          <div className="relative h-8 w-8">
-            <Image src={"/SystemJewel.png"} fill alt="" />
-          </div>
-          <p className="text-2xl font-bold text-[#F6E0C1]">
-            message.chatgptResponse.content
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Story = () => {
+const Story = ({ userId }: { userId: string }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,6 +57,24 @@ const Story = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("submit");
   }
+
+  const getStory = async () => {
+    const { data }: { data: Story[] } = await axios.get("/api/story", {
+      params: { storyId: router.query.storyId },
+    });
+    console.log(data);
+    return data[0];
+  };
+
+  const { data, isLoading } = useQuery(
+    ["story", userId, router.query.storyId],
+    getStory,
+    {
+      onSuccess: (data) => {
+        console.log(data);
+      },
+    }
+  );
 
   return (
     <div
@@ -87,23 +101,26 @@ const Story = () => {
       <div className="flex flex-col items-center justify-center gap-4 p-10">
         <div className="flex w-full gap-8 rounded-lg border-4 border-[#EAA916]  bg-[#411A08] p-10">
           <div className="flex h-96 flex-1 flex-col gap-8 overflow-y-scroll">
-            <div className="flex h-5/6 w-full flex-shrink-0 gap-4">
-              <img
-                className="h-full w-96 flex-shrink-0 rounded-lg bg-amber-200 object-cover"
-                src={""}
-              />
-              <div className="flex w-full gap-4 border-b-2 border-[#EAA916] p-4">
-                <div className="relative h-8 w-8">
-                  <Image src={"/SystemJewel.png"} fill alt="" />
+            {data?.initDialog && data?.initImageSrc && (
+              <div className="flex h-5/6 w-full flex-shrink-0 gap-4">
+                <img
+                  className="h-full w-96 flex-shrink-0 rounded-lg bg-amber-200 object-cover"
+                  src={data?.initImageSrc}
+                />
+                <div className="flex w-full gap-4 border-b-2 border-[#EAA916] p-4">
+                  <div className="relative h-8 w-8">
+                    <Image src={"/SystemJewel.png"} fill alt="" />
+                  </div>
+                  <p className="text-2xl font-bold text-[#F6E0C1]">
+                    {data?.initDialog}
+                  </p>
                 </div>
-                <p className="text-2xl font-bold text-[#F6E0C1]">
-                  initialData?.initDialog
-                </p>
               </div>
-            </div>
-            <ChatComponent />
-            <ChatComponent />
-            <ChatComponent />
+            )}
+
+            {data?.messages.map((message) => (
+              <Chat message={message} key={message.id} />
+            ))}
           </div>
         </div>
         <Form {...form}>
@@ -153,6 +170,23 @@ const Story = () => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { userId } = getAuth(ctx.req);
+  if (!userId) {
+    return {
+      redirect: {
+        destination: "/sign-in?redirect_url=" + ctx.resolvedUrl,
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {
+      userId,
+    },
+  };
 };
 
 export default Story;

@@ -58,7 +58,7 @@ const SignInForm = ({
       email: formData.email,
       password: formData.password,
     });
-    console.log(data);
+
     return data;
   };
 
@@ -96,7 +96,6 @@ const SignInForm = ({
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (!isRegister) signInMutate.mutate(values);
-    console.log(isRegister);
   }
 
   return (
