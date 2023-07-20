@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { db } from "@/db/index";
 import { stories } from "@/db/schema";
-import { eq, isNull, or } from "drizzle-orm";
+import { eq, isNull, or, and } from "drizzle-orm";
 
 export default async function handler(
   req: NextApiRequest,
@@ -29,12 +29,19 @@ export default async function handler(
 
     // create a new story
     if (userId && title) {
-      const story = await db.insert(stories).values({
+      const createStory = await db.insert(stories).values({
         title,
         authorId: userId,
       });
-      if (!story) return res.status(200).json({ message: "新增失敗" });
-      return res.status(200).json({ message: "新增成功" });
+      const getStory = await db
+        .select()
+        .from(stories)
+        .where(and(eq(stories.title, title), eq(stories.authorId, userId)));
+        
+      if (!getStory) return res.status(200).json({ message: "新增失敗" });
+      return res
+        .status(200)
+        .json({ message: "新增成功", storyId: getStory[0].id });
     }
   }
 

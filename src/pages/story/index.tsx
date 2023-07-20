@@ -9,8 +9,8 @@ import { UserNav } from "@/components/UserNav";
 
 interface Story {
   id: string;
-  // initDialog: string;
-  // initImage: string;
+  initDialog: string;
+  initImage: string;
   // letters: string;
   // meaning: string;
   // phrases: string;
@@ -19,7 +19,6 @@ interface Story {
   title: string;
   type: string;
   authorId: string | null;
-  // words: string;
 }
 const Library = () => {
   const router = useRouter();
