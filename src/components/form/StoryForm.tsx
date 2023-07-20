@@ -12,80 +12,68 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useUser } from "@clerk/nextjs";
 
 const formSchema = z.object({
-  nickname: z
+  storyTitle: z
     .string()
-    .min(2, "暱稱長度至少2個字")
-    .max(10, "暱稱長度至多10個字"),
+    .min(2, "故事名稱長度至少2個字")
+    .max(20, "故事名稱長度至多20個字"),
 });
 
-const NicknameForm = ({
-  setIsRegister,
-  userInfo,
-}: {
-  setIsRegister: React.Dispatch<React.SetStateAction<boolean>>;
-  userInfo: {
-    email: string;
-    password: string;
-  };
-}) => {
+const StoryForm = () => {
   const router = useRouter();
   const { toast } = useToast();
+  const { user } = useUser();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nickname: "",
+      storyTitle: "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    signUpMutate.mutate(values);
+    mutate(values);
   }
 
-  const signUp = async (formData: z.infer<typeof formSchema>) => {
-    const { data } = await axios.post("api/user", {
-      email: userInfo.email,
-      password: userInfo.password,
-      nickname: formData.nickname,
+  const createStroy = async (formData: z.infer<typeof formSchema>) => {
+    const { data } = await axios.post("api/story", {
+      userId: user?.id,
+      title: formData.storyTitle,
     });
 
     return data;
   };
 
-  const signUpMutate = useMutation(signUp, {
+  const { mutate, isLoading } = useMutation(createStroy, {
     onSuccess: (data) => {
-      setIsRegister(false);
-      if (data.message !== "註冊成功") {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: data.message,
-          action: <ToastAction altText="Try again">再試一次！</ToastAction>,
-        });
-      }
-      if (data.message === "註冊成功") {
-        toast({
-          title: "Congratulations! You've signed up successfully",
-          description: data.message,
-          action: <ToastAction altText="Try again">重新登入！</ToastAction>,
-          className: "bg-emerald-500 text-white",
-        });
-        router.push("/");
-      }
+      router.push(`/story/我的故事/${data.storyId}`);
+      toast({
+        title: "成功",
+        description: data.message,
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
     onError: (error) => {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
-        action: <ToastAction altText="Try again">Try again</ToastAction>,
+        description: "請先登入",
+        action: (
+          <ToastAction
+            altText="Try again"
+            onClick={() => {
+              router.push("/signin");
+            }}
+          >
+            登入
+          </ToastAction>
+        ),
       });
     },
   });
@@ -94,24 +82,25 @@ const NicknameForm = ({
     <Form {...form}>
       <motion.form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex w-full max-w-lg flex-col items-center justify-center space-y-4 pt-20 sm:w-3/4"
+        className="flex w-full flex-col items-center justify-center space-y-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <div className="flex w-full flex-col items-center gap-4 rounded-lg bg-[#412C2B] p-8">
-          <h1 className="w-3/4 pb-4 text-center text-2xl font-semibold text-white">
-            歡迎進入 iMagicNation 的世界 現在為自己取一個暱稱吧！
-          </h1>
+        <div className="flex h-72 w-full flex-col items-center justify-center gap-4 rounded-lg bg-[#412C2B] p-8">
+          <h2 className="text-center text-2xl font-semibold text-white">
+            在這個廣大的世界裡，有無數的未知等著我們去發掘。
+            讓我們一起踏上冒險之旅，探索自己的能力和潛力！
+          </h2>
           <FormField
             control={form.control}
-            name="nickname"
+            name="storyTitle"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder="輸入暱稱"
+                    placeholder="輸入故事名稱"
                     className="h-16 border-2 border-[#1E0B12] bg-[#F6E0C1] text-[#1E0B12]"
                   />
                 </FormControl>
@@ -125,6 +114,7 @@ const NicknameForm = ({
             type="submit"
             asChild
             className="h-16 grow border-4 border-[#A38984] bg-[#261920] text-white"
+            disabled={isLoading}
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -139,4 +129,4 @@ const NicknameForm = ({
   );
 };
 
-export default NicknameForm;
+export default StoryForm;

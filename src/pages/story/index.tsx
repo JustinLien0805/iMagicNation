@@ -1,10 +1,11 @@
-import titleImage from "@/assets/iMagicNationIcon.png";
 import CategoryRow from "@/components/CategoryRow";
-import LibraryBackground from "@/assets/LibraryBackground.png";
+
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
+import { UserNav } from "@/components/UserNav";
 
 interface Story {
   id: string;
@@ -24,12 +25,11 @@ const Library = () => {
   const router = useRouter();
   const fetchList = async (): Promise<Story[]> => {
     const { data }: { data: Story[] } = await axios.post("api/story", {
-      userId: "2",
+      userId: "1",
     });
     return data;
   };
   const { data, isSuccess, isLoading } = useQuery(["storyList"], fetchList);
-  console.log(data);
 
   const uniqueTypes = [...new Set(data?.map((item) => item.type))];
   uniqueTypes.sort((a, b) => {
@@ -41,24 +41,27 @@ const Library = () => {
       return a.localeCompare(b);
     }
   });
-  console.log(uniqueTypes);
+
   return (
     <>
-      <div className="flex min-h-screen flex-col gap-8 bg-[#411A08] pt-10">
-        <div className="flex items-center px-4">
-          <img
-            src={titleImage.src}
-            className="mr-auto h-12"
+      <div className="flex min-h-screen flex-col bg-[#411A08]">
+        <div className="flex items-center p-4 px-10">
+          <Image
+            src={"/iMagicNationIcon.png"}
+            className="mr-auto cursor-pointer"
+            width={420}
+            height={80}
             alt=""
             onClick={() => {
-              router.push("/home");
+              router.push("/");
             }}
           />
+          <UserNav />
         </div>
         <div
-          className="flex w-screen grow flex-col gap-8 p-8"
+          className="flex w-screen grow flex-col gap-8 p-10"
           style={{
-            backgroundImage: `url(${LibraryBackground.src})`,
+            backgroundImage: 'url("/LibraryBackground.png")',
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",

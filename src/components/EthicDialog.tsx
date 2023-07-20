@@ -1,11 +1,6 @@
-import Continent1 from "@/assets/大陸1.png";
-import Continent2 from "@/assets/大陸2.png";
-import Continent3 from "@/assets/大陸3.png";
-import Continent4 from "@/assets/大陸4.png";
-import Continent5 from "@/assets/大陸5.png";
-import IMagicNationIcon from "@/assets/iMagicNationIcon.png";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 import {
   Dialog,
@@ -16,31 +11,35 @@ import {
 } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import { clsx } from "clsx";
+import StoryForm from "./form/StoryForm";
 
 const EthicDialog = ({
-  name,
+  type,
   position,
 }: {
-  name: string;
+  type: string;
   position: string;
 }) => {
+  const router = useRouter();
+
   const stages = ["第一關", "第二關", "第三關", "第四關", "第五關", "第六關"];
-  let imgSrc = Continent1.src;
-  switch (name) {
+  let imgSrc = "/大陸1.png";
+
+  switch (type) {
     case "多元文化與國際理解":
-      imgSrc = Continent4.src;
+      imgSrc = "/大陸4.png";
       break;
     case "科技資訊與媒體素養":
-      imgSrc = Continent3.src;
+      imgSrc = "/大陸3.png";
       break;
     case "人際關係與團隊合作":
-      imgSrc = Continent2.src;
+      imgSrc = "/大陸2.png";
       break;
     case "道德實踐與公民意識":
-      imgSrc = Continent5.src;
+      imgSrc = "/大陸5.png";
       break;
     default:
-      imgSrc = Continent1.src;
+      imgSrc = "/大陸1.png";
       break;
   }
 
@@ -65,47 +64,60 @@ const EthicDialog = ({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {name}
+            {type}
           </motion.button>
         </Button>
       </DialogTrigger>
       <EthicDialogContent>
-        <img
-          src={IMagicNationIcon.src}
+        <Image
+          src={"/iMagicNationIcon.png"}
           alt=""
-          className="absolute left-4 top-4 h-20"
+          className="absolute left-4 top-4 cursor-pointer"
+          width={420}
+          height={80}
         />
         <div className="flex w-full">
           <div className="flex grow flex-col items-center justify-center space-y-8">
             <DialogHeader>
               <DialogTitle className="text-4xl text-[#411A08]">
-                {name}
+                {type}
               </DialogTitle>
             </DialogHeader>
-            <img src={imgSrc} alt="" className="max-h-96" />
+            <div className="relative aspect-video w-full">
+              <Image src={imgSrc} alt="" fill={true} />
+            </div>
           </div>
-          <section className="grid h-full grow grid-cols-2 gap-4 p-20">
-            {stages.map((stage) => (
-              <Button
-                key={stage}
-                className="self-center border-4 border-[#EAA916] px-4 py-6 text-2xl font-semibold text-[#EAA916]"
-                style={{
-                  borderRadius: "0.75rem",
-                  border: "5px solid #EAA916",
-                  background:
-                    "linear-gradient(180deg, #411A08 0%, #6B3C22 38.02%, #411A08 100%)",
-                }}
-                asChild
-              >
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+          {type === "我的故事" ? (
+            <div className="flex h-full w-1/2 flex-col justify-center pl-8">
+              <StoryForm />
+            </div>
+          ) : (
+            <section className="grid h-full grow grid-cols-2 gap-4 p-20">
+              {stages.map((stage, index) => (
+                <Button
+                  key={stage}
+                  className="self-center border-4 border-[#EAA916] px-4 py-6 text-2xl font-semibold text-[#EAA916]"
+                  style={{
+                    borderRadius: "0.75rem",
+                    border: "5px solid #EAA916",
+                    background:
+                      "linear-gradient(180deg, #411A08 0%, #6B3C22 38.02%, #411A08 100%)",
+                  }}
+                  asChild
+                  onClick={() => {
+                    router.push(`/story/${type}/${index + 1}`);
+                  }}
                 >
-                  {stage}
-                </motion.button>
-              </Button>
-            ))}
-          </section>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {stage}
+                  </motion.button>
+                </Button>
+              ))}
+            </section>
+          )}
         </div>
       </EthicDialogContent>
     </Dialog>

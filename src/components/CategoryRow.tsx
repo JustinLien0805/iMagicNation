@@ -1,5 +1,6 @@
 import StorybookIcon from "@/assets/StorybookIcon.png";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { Skeleton } from "@/components/ui/skeleton";
 interface Story {
@@ -49,10 +50,10 @@ const CategoryRow = ({ type, storys }: CategoryRowProps) => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => {
-              router.push(`/library/abc/${story.id}`);
+              router.push(`/story/${type}/${story.id}`);
             }}
           >
-            <img src={StorybookIcon.src} alt="" className="h-28" />
+            <Image src={"/StorybookIcon.png"} alt="" height={112} width={118} />
             <p>{story.title}</p>
           </motion.div>
         ))}
