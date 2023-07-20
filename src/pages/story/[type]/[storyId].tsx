@@ -20,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import { useRef, useState, useEffect } from "react";
 
 type Story = {
   id: number;
@@ -47,16 +48,9 @@ const formSchema = z.object({
 
 const Story = ({ userId }: { userId: string }) => {
   const router = useRouter();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      input: "",
-    },
-  });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("submit");
-  }
+  const queryClient = useQueryClient();
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const getStory = async () => {
     const { data }: { data: Story[] } = await axios.get("/api/story", {
@@ -72,9 +66,52 @@ const Story = ({ userId }: { userId: string }) => {
     {
       onSuccess: (data) => {
         console.log(data);
+        setMessages(data.messages);
       },
     }
   );
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      input: "",
+    },
+  });
+
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  };
+
+  const postMessage = async (formData: z.infer<typeof formSchema>) => {
+    const res = await axios.post("/api/message", {
+      storyId: router.query.storyId,
+      count: data?.messages.length,
+      input: formData.input,
+    });
+    return res;
+  };
+
+  const { mutate } = useMutation(postMessage, {
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.invalidateQueries(["story", userId, router.query.storyId]);
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    mutate(values);
+  }
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  if (!data) {
+    return <div>loading...</div>;
+  }
 
   return (
     <div
@@ -100,31 +137,39 @@ const Story = ({ userId }: { userId: string }) => {
       </div>
       <div className="flex flex-col items-center justify-center gap-4 p-10">
         <div className="flex w-full gap-8 rounded-lg border-4 border-[#EAA916]  bg-[#411A08] p-10">
-          <div className="flex h-96 flex-1 flex-col gap-8 overflow-y-scroll">
-            {data?.initDialog && data?.initImageSrc && (
+          <div
+            className="flex h-96 flex-1 flex-col gap-8 overflow-y-scroll"
+            ref={chatContainerRef}
+          >
+            {data.initDialog && data.initImageSrc && (
               <div className="flex h-5/6 w-full flex-shrink-0 gap-4">
                 <img
                   className="h-full w-96 flex-shrink-0 rounded-lg bg-amber-200 object-cover"
-                  src={data?.initImageSrc}
+                  src={data.initImageSrc}
                 />
                 <div className="flex w-full gap-4 border-b-2 border-[#EAA916] p-4">
                   <div className="relative h-8 w-8">
                     <Image src={"/SystemJewel.png"} fill alt="" />
                   </div>
                   <p className="text-2xl font-bold text-[#F6E0C1]">
-                    {data?.initDialog}
+                    {data.initDialog}
                   </p>
                 </div>
               </div>
             )}
 
-            {data?.messages.map((message) => (
+            {data.messages.map((message) => (
               <Chat message={message} key={message.id} />
             ))}
           </div>
         </div>
         <Form {...form}>
-          <form className="w-full" onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            className={`w-full ${
+              data.messages.length === 10 ? "hidden" : "flex"
+            }`}
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
             <div
               className="flex h-32 w-full items-center space-x-4 rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-2"
               style={{
@@ -153,7 +198,7 @@ const Story = ({ userId }: { userId: string }) => {
                 className="h-16 w-16 cursor-pointer bg-transparent"
               >
                 <motion.button
-                  type="submit"
+                  disabled={form.formState.isSubmitting}
                   style={{
                     backgroundImage: 'url("/SendBtn.png")',
                     backgroundSize: "cover",

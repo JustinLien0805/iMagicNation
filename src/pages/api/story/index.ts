@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { db } from "@/db/index";
-import { messages, stories } from "@/db/schema";
-import { eq, isNull, or, and } from "drizzle-orm";
+import { stories } from "@/db/schema";
+import { eq, isNull, or } from "drizzle-orm";
 
 export default async function handler(
   req: NextApiRequest,
@@ -49,15 +49,16 @@ export default async function handler(
     }
 
     if (storyId && userId) {
+      console.log(storyId, userId);
       const story = await db.query.stories.findMany({
-        where: (stories) => eq(stories.id, 1),
+        where: (stories) => eq(stories.id, parseInt(storyId)),
         with: {
           messages: {
             where: (messages) => eq(messages.authorId, userId),
           },
         },
       });
-
+      console.log(story);
       if (!story) return res.status(200).json({ message: "找不到故事" });
       return res.status(200).json(story);
     }

@@ -17,13 +17,13 @@ const Chat = ({ message }: { message: Message }) => {
         src={message.imageSrc}
       />
       <div className="flex w-full flex-col">
-        <div className="flex h-40 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
+        <div className="flex h-40 w-full flex-shrink-0 flex-row-reverse gap-4 border-b-2 border-[#EAA916] p-4">
           <div className="relative h-8 w-8">
             <Image src={"/UserJewel.png"} fill alt="" />
           </div>
           <p className="text-2xl font-bold text-[#F6E0C1]">{message.input}</p>
         </div>
-        <div className="flex h-96 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
+        <div className="flex h-72 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
           <div className="relative h-8 w-8">
             <Image src={"/SystemJewel.png"} fill alt="" />
           </div>
