@@ -1,16 +1,22 @@
 import { NextResponse } from "next/server";
 import { authMiddleware } from "@clerk/nextjs";
 
-
 export default authMiddleware({
-  publicRoutes: ["/signin", "/"],
-  afterAuth(auth, req, evt) {
-    // handle users who aren't authenticated
-    if (!auth.userId && !auth.isPublicRoute) {
-      return NextResponse.redirect("localhost:3000/signin");
+  publicRoutes: ["/signin"],
+  async afterAuth(auth, req) {
+    if (auth.isPublicRoute) {
+      //  For public routes, we don't need to do anything
+      return NextResponse.next();
     }
 
-    NextResponse.next();
+    const url = new URL(req.nextUrl.origin);
+
+    if (!auth.userId) {
+      //  If user tries to access a private route without being authenticated,
+      //  redirect them to the sign in page
+      url.pathname = "/signin";
+      return NextResponse.redirect(url);
+    }
   },
 });
 

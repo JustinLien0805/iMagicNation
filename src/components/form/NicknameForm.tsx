@@ -77,7 +77,7 @@ const NicknameForm = ({
           action: <ToastAction altText="Try again">重新登入！</ToastAction>,
           className: "bg-emerald-500 text-white",
         });
-        router.push("/home");
+        router.push("/");
       }
     },
     onError: (error) => {

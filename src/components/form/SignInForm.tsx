@@ -73,7 +73,7 @@ const SignInForm = ({
         });
       }
       if (data.message === "登入成功") {
-        router.push("/home");
+        router.push("/");
       }
     },
     onError: (error) => {

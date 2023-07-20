@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
+import { UserNav } from "@/components/UserNav";
 
 interface Story {
   id: string;
@@ -40,24 +41,25 @@ const Library = () => {
       return a.localeCompare(b);
     }
   });
- 
+
   return (
     <>
-      <div className="flex min-h-screen flex-col gap-8 bg-[#411A08] pt-10">
-        <div className="flex items-center px-4">
+      <div className="flex min-h-screen flex-col bg-[#411A08]">
+        <div className="flex items-center p-4 px-10">
           <Image
             src={"/iMagicNationIcon.png"}
-            className="mr-auto"
+            className="mr-auto cursor-pointer"
             width={420}
             height={80}
             alt=""
             onClick={() => {
-              router.push("/home");
+              router.push("/");
             }}
           />
+          <UserNav />
         </div>
         <div
-          className="flex w-screen grow flex-col gap-8 p-8"
+          className="flex w-screen grow flex-col gap-8 p-10"
           style={{
             backgroundImage: 'url("/LibraryBackground.png")',
             backgroundSize: "cover",

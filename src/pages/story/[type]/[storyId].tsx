@@ -21,6 +21,7 @@ import { motion } from "framer-motion";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { useRef, useState, useEffect } from "react";
+import { UserNav } from "@/components/UserNav";
 
 type Story = {
   id: number;
@@ -126,14 +127,15 @@ const Story = ({ userId }: { userId: string }) => {
       <div className="flex w-full items-center bg-[#411A08] px-10 py-4">
         <Image
           src={"/IMagicNationIcon.png"}
-          className="cursor-pointer"
+          className="mr-auto cursor-pointer"
           width={420}
           height={80}
           alt=""
           onClick={() => {
-            router.push("/home");
+            router.push("/");
           }}
         />
+        <UserNav />
       </div>
       <div className="flex flex-col items-center justify-center gap-4 p-10">
         <div className="flex w-full gap-8 rounded-lg border-4 border-[#EAA916]  bg-[#411A08] p-10">

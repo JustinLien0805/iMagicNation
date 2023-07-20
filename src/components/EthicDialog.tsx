@@ -72,7 +72,7 @@ const EthicDialog = ({
         <Image
           src={"/iMagicNationIcon.png"}
           alt=""
-          className="absolute left-4 top-4"
+          className="absolute left-4 top-4 cursor-pointer"
           width={420}
           height={80}
         />
