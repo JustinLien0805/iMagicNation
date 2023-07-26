@@ -26,7 +26,7 @@ const CategoryRow = ({ type, storys }: CategoryRowProps) => {
   const router = useRouter();
   return (
     <div
-      className="w-full rounded-lg border-2 border-[#EAA916] p-4 text-white"
+      className="w-full rounded-lg border-2 border-[#EAA916] px-4 pt-4 text-white"
       style={{
         background:
           "linear-gradient(to bottom right, #411A08 0%, rgba(107, 60, 34, 0.98) 21%, rgba(65, 26, 8, 0.97) 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #411A08 0%, rgba(107, 60, 34, 0.98) 21%, rgba(65, 26, 8, 0.97) 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #411A08 0%, rgba(107, 60, 34, 0.98) 21%, rgba(65, 26, 8, 0.97) 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #411A08 0%, rgba(107, 60, 34, 0.98) 21%, rgba(65, 26, 8, 0.97) 50%) top right / 50% 50% no-repeat",
@@ -42,13 +42,13 @@ const CategoryRow = ({ type, storys }: CategoryRowProps) => {
       >
         {type}
       </h2>
-      <div className="flex items-center gap-4 overflow-x-scroll">
+      <div className="mb-4 flex items-center gap-4 overflow-y-hidden overflow-x-scroll">
         {storys.map((story) => (
           <motion.div
-            className="z-50 flex cursor-pointer flex-col items-center"
+            className="z-10 flex cursor-pointer flex-col items-center"
             key={story.id}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => {
               router.push(`/story/${type}/${story.id}`);
             }}

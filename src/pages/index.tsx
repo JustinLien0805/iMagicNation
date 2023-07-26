@@ -20,14 +20,14 @@ const home = () => {
       <Image
         src={"/iMagicNationIcon.png"}
         alt="iMagicNationIcon"
-        className="absolute left-4 top-4 cursor-pointer"
+        className="absolute left-10 top-4 cursor-pointer"
         width={420}
         height={80}
       />
-      <div className="absolute right-4 top-4 flex flex-col items-center space-y-4">
+      <div className="absolute right-10 top-4 flex flex-col items-center space-y-4">
         <UserNav />
         <motion.div
-          className="relative h-20 w-16 cursor-pointer"
+          className="relative h-24 w-20 cursor-pointer"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => {

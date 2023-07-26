@@ -68,10 +68,10 @@ const Library = () => {
         >
           {isLoading && (
             <>
-              <Skeleton className="h-48 w-full bg-[#7c3818]" />
-              <Skeleton className="h-48 w-full bg-[#7c3818]" />
-              <Skeleton className="h-48 w-full bg-[#7c3818]" />
-              <Skeleton className="h-48 w-full bg-[#7c3818]" />
+              <Skeleton className="h-48 w-full bg-amber-950" />
+              <Skeleton className="h-48 w-full bg-amber-950" />
+              <Skeleton className="h-48 w-full bg-amber-950" />
+              <Skeleton className="h-48 w-full bg-amber-950" />
             </>
           )}
           {isSuccess &&

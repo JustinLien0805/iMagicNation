@@ -140,11 +140,11 @@ const Story = ({ userId }: { userId: string }) => {
       <div className="flex flex-col items-center justify-center gap-4 p-10">
         <div className="flex w-full gap-8 rounded-lg border-4 border-[#EAA916]  bg-[#411A08] p-10">
           <div
-            className="flex h-96 flex-1 flex-col gap-8 overflow-y-scroll"
+            className="flex h-96 flex-1 snap-y snap-mandatory flex-col gap-8 overflow-y-scroll"
             ref={chatContainerRef}
           >
             {data.initDialog && data.initImageSrc && (
-              <div className="flex h-5/6 w-full flex-shrink-0 gap-4">
+              <div className="flex h-5/6 w-full flex-shrink-0 snap-start gap-4">
                 <img
                   className="h-full w-96 flex-shrink-0 rounded-lg bg-amber-200 object-cover"
                   src={data.initImageSrc}
