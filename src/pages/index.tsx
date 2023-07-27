@@ -53,7 +53,7 @@ const home = () => {
         type="道德實踐與公民意識"
         position="absolute bottom-[15%] left-1/2"
       />
-      <EthicDialog type="我的故事" position="absolute left-[40%] top-1/2 " />
+      <EthicDialog type="課綱故事" position="absolute left-[40%] top-1/2 " />
       <Toaster />
     </div>
   );

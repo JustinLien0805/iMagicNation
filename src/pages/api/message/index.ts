@@ -21,16 +21,17 @@ export default async function handler(
     return res.status(401).json({ message: "請先登入" });
   }
 
-  // TODO connect to ChatGPT to generate replay: fetch all previous messages, concat them, and send to ChatGPT
-  // TODO if count = 9, create ending message
-  // TODO connect to StableDiffusion to generate image
-
   const chats = await db
     .select({ input: messages.input, reply: messages.reply })
     .from(messages)
     .where(and(eq(messages.storyId, storyId), eq(messages.authorId, userId)));
 
   console.log(chats);
+
+  // TODO connect to ChatGPT to generate replay: fetch all previous messages, concat them, and send to ChatGPT
+  // TODO if count = 9, create ending message
+  // TODO connect to StableDiffusion to generate image
+  
 
   const createMessage = await db.insert(messages).values({
     storyId,
