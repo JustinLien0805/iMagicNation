@@ -9,8 +9,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { userId } = getAuth(req);
-  const { title }: { userId: string; title: string } = req.body;
+  const { title, type }: { title: string; type: string } = req.body;
   const { method } = req;
+  console.log(userId, type, title);
 
   if (!userId) {
     return res.status(401).json({ message: "請先登入" });
@@ -28,20 +29,24 @@ export default async function handler(
     }
 
     // create a new story
-    if (userId && title) {
+    // TODO pass the userId and selected type to the AI backend
+
+    if (userId && type) {
       const createStory = await db.insert(stories).values({
         title,
+        type,
         authorId: userId,
       });
+
       const getStory = await db
         .select()
         .from(stories)
         .where(and(eq(stories.title, title), eq(stories.authorId, userId)));
-        
+
       if (!getStory) return res.status(200).json({ message: "新增失敗" });
       return res
         .status(200)
-        .json({ message: "新增成功", storyId: getStory[0].id });
+        .json({ message: "新增成功", storyId: getStory[0].id, type });
     }
   }
 

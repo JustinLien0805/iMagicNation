@@ -340,6 +340,21 @@ export const publishers: ReadonlyArray<PublishersObject> = [
   },
 ];
 
+export const GRADES = [
+  "1上",
+  "1下",
+  "2上",
+  "2下",
+  "3上",
+  "3下",
+  "4上",
+  "4下",
+  "5上",
+  "5下",
+  "6上",
+  "6下",
+];
+
 export interface PublishersObject {
   label: string;
   grades: Grade[];
