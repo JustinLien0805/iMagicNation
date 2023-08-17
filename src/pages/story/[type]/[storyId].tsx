@@ -29,7 +29,7 @@ type Story = {
   type: string;
   authorId?: string;
   initDialog?: string;
-  initImageSrc?: string;
+  initImage?: string;
   messages: Message[];
 };
 
@@ -87,18 +87,21 @@ const Story = ({ userId }: { userId: string }) => {
   };
 
   const postMessage = async (formData: z.infer<typeof formSchema>) => {
+    console.log(formData.input);
     const res = await axios.post("/api/message", {
       storyId: router.query.storyId,
-      count: data?.messages.length,
       input: formData.input,
     });
     return res;
   };
 
-  const { mutate } = useMutation(postMessage, {
+  const { mutate, isLoading: postLoading } = useMutation(postMessage, {
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries(["story", userId, router.query.storyId]);
+    },
+    onError: (error) => {
+      console.log(error);
     },
   });
 
@@ -113,10 +116,13 @@ const Story = ({ userId }: { userId: string }) => {
   if (!data) {
     return <div>loading...</div>;
   }
+  if (postLoading) {
+    return <div>post loading...</div>;
+  }
 
   return (
     <div
-      className="flex h-screen flex-col justify-start gap-4 bg-[#411A08]"
+      className="flex h-screen flex-col justify-start overflow-hidden bg-[#411A08]"
       style={{
         backgroundImage: 'url("/LibraryBackground.png")',
         backgroundSize: "cover",
@@ -143,17 +149,17 @@ const Story = ({ userId }: { userId: string }) => {
             className="flex h-96 flex-1 snap-y snap-mandatory flex-col gap-8 overflow-y-scroll"
             ref={chatContainerRef}
           >
-            {data.initDialog && data.initImageSrc && (
+            {data.initDialog && data.initImage && (
               <div className="flex h-5/6 w-full flex-shrink-0 snap-start gap-4">
                 <img
                   className="h-full w-96 flex-shrink-0 rounded-lg bg-amber-200 object-cover"
-                  src={data.initImageSrc}
+                  src={data.initImage}
                 />
                 <div className="flex w-full gap-4 border-b-2 border-[#EAA916] p-4">
                   <div className="relative h-8 w-8">
-                    <Image src={"/SystemJewel.png"} fill alt="" />
+                    <Image src={"/SystemJewel.png"} fill alt="SystemJewel" />
                   </div>
-                  <p className="text-2xl font-bold text-[#F6E0C1]">
+                  <p className="w-full text-2xl font-bold text-[#F6E0C1]">
                     {data.initDialog}
                   </p>
                 </div>

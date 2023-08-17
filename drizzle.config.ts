@@ -9,6 +9,6 @@ export default {
   out: "./drizzle",
   driver: "mysql2",
   dbCredentials: {
-    connectionString: process.env.PLANETSCALE_DATABASE_URL || "",
+    connectionString: process.env.RAILWAY_DATABASE_URL || "",
   },
 } satisfies Config;

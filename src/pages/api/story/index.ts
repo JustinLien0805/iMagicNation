@@ -11,7 +11,6 @@ export default async function handler(
   const { userId } = getAuth(req);
   const { title, type }: { title: string; type: string } = req.body;
   const { method } = req;
-  console.log(userId, type, title);
 
   if (!userId) {
     return res.status(401).json({ message: "請先登入" });
@@ -61,7 +60,6 @@ export default async function handler(
     }
 
     if (storyId && userId) {
-      console.log(storyId, userId);
       const story = await db.query.stories.findMany({
         where: (stories) => eq(stories.id, parseInt(storyId)),
         with: {
@@ -70,7 +68,6 @@ export default async function handler(
           },
         },
       });
-      console.log(story);
       if (!story) return res.status(200).json({ message: "找不到故事" });
       return res.status(200).json(story);
     }
