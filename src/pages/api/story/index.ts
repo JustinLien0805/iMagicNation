@@ -1,15 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { db } from "@/db/index";
-import { stories } from "@/db/schema";
-import { eq, isNull, or } from "drizzle-orm";
+import { messages, stories } from "@/db/schema";
+import { eq, isNull, or, and } from "drizzle-orm";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { userId } = getAuth(req);
-  const { title }: { userId: string; title: string } = req.body;
+  const { title, type }: { title: string; type: string } = req.body;
   const { method } = req;
 
   if (!userId) {
@@ -21,6 +21,7 @@ export default async function handler(
       const story = await db
         .select()
         .from(stories)
+        // TODO: only get the story that user created
         .where(or(isNull(stories.authorId), eq(stories.authorId, userId)))
         .orderBy(stories.type);
 
@@ -28,13 +29,24 @@ export default async function handler(
     }
 
     // create a new story
-    if (userId && title) {
-      const story = await db.insert(stories).values({
+    // TODO pass the userId and selected type to the AI backend
+
+    if (userId && type) {
+      const createStory = await db.insert(stories).values({
         title,
+        type,
         authorId: userId,
       });
-      if (!story) return res.status(200).json({ message: "新增失敗" });
-      return res.status(200).json({ message: "新增成功" });
+
+      const getStory = await db
+        .select()
+        .from(stories)
+        .where(and(eq(stories.title, title), eq(stories.authorId, userId)));
+
+      if (!getStory) return res.status(200).json({ message: "新增失敗" });
+      return res
+        .status(200)
+        .json({ message: "新增成功", storyId: getStory[0].id, type });
     }
   }
 
@@ -49,7 +61,6 @@ export default async function handler(
     }
 
     if (storyId && userId) {
-      console.log(storyId, userId);
       const story = await db.query.stories.findMany({
         where: (stories) => eq(stories.id, parseInt(storyId)),
         with: {
@@ -58,7 +69,7 @@ export default async function handler(
           },
         },
       });
-      console.log(story);
+
       if (!story) return res.status(200).json({ message: "找不到故事" });
       return res.status(200).json(story);
     }

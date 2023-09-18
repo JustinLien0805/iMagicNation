@@ -9,8 +9,8 @@ import { UserNav } from "@/components/UserNav";
 
 interface Story {
   id: string;
-  // initDialog: string;
-  // initImage: string;
+  initDialog: string;
+  initImage: string;
   // letters: string;
   // meaning: string;
   // phrases: string;
@@ -19,7 +19,6 @@ interface Story {
   title: string;
   type: string;
   authorId: string | null;
-  // words: string;
 }
 const Library = () => {
   const router = useRouter();
@@ -44,7 +43,7 @@ const Library = () => {
 
   return (
     <>
-      <div className="flex min-h-screen flex-col bg-[#411A08]">
+      <div className="flex min-h-screen flex-col bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08]">
         <div className="flex items-center p-4 px-10">
           <Image
             src={"/iMagicNationIcon.png"}
@@ -69,10 +68,10 @@ const Library = () => {
         >
           {isLoading && (
             <>
-              <Skeleton className="h-48 w-full bg-[#7c3818]" />
-              <Skeleton className="h-48 w-full bg-[#7c3818]" />
-              <Skeleton className="h-48 w-full bg-[#7c3818]" />
-              <Skeleton className="h-48 w-full bg-[#7c3818]" />
+              <Skeleton className="h-48 w-full bg-amber-950" />
+              <Skeleton className="h-48 w-full bg-amber-950" />
+              <Skeleton className="h-48 w-full bg-amber-950" />
+              <Skeleton className="h-48 w-full bg-amber-950" />
             </>
           )}
           {isSuccess &&

@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/router";
 import Image from "next/image";
-
+import { useRouter } from "next/router";
 import {
   Dialog,
   DialogHeader,
@@ -12,6 +11,9 @@ import {
 import { motion } from "framer-motion";
 import { clsx } from "clsx";
 import StoryForm from "./form/StoryForm";
+import LectureStoryForm from "./form/LectureStoryForm";
+
+const STAGES = ["第一關", "第二關", "第三關", "第四關", "第五關", "第六關"];
 
 const EthicDialog = ({
   type,
@@ -21,8 +23,6 @@ const EthicDialog = ({
   position: string;
 }) => {
   const router = useRouter();
-
-  const stages = ["第一關", "第二關", "第三關", "第四關", "第五關", "第六關"];
   let imgSrc = "/大陸1.png";
 
   switch (type) {
@@ -87,36 +87,29 @@ const EthicDialog = ({
               <Image src={imgSrc} alt="" fill={true} />
             </div>
           </div>
-          {type === "我的故事" ? (
+          {type === "課綱故事" ? (
             <div className="flex h-full w-1/2 flex-col justify-center pl-8">
-              <StoryForm />
+              <LectureStoryForm />
             </div>
           ) : (
-            <section className="grid h-full grow grid-cols-2 gap-4 p-20">
-              {stages.map((stage, index) => (
-                <Button
-                  key={stage}
-                  className="self-center border-4 border-[#EAA916] px-4 py-6 text-2xl font-semibold text-[#EAA916]"
+            <div className=" grid h-full w-1/2 grid-cols-2 flex-col justify-center gap-4 p-10 pl-8">
+              {STAGES.map((stage, key) => (
+                <button
+                  key={key}
+                  className="inline-block w-48 cursor-pointer self-center rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08]"
                   style={{
-                    borderRadius: "0.75rem",
-                    border: "5px solid #EAA916",
                     background:
-                      "linear-gradient(180deg, #411A08 0%, #6B3C22 38.02%, #411A08 100%)",
+                      "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+                    boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
                   }}
-                  asChild
                   onClick={() => {
-                    router.push(`/story/${type}/${index + 1}`);
+                    router.push(`/story/ethical-story/${type}/${key + 1}`);
                   }}
                 >
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {stage}
-                  </motion.button>
-                </Button>
+                  {stage}
+                </button>
               ))}
-            </section>
+            </div>
           )}
         </div>
       </EthicDialogContent>
