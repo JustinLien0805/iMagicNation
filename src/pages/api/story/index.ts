@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { db } from "@/db/index";
-import { stories } from "@/db/schema";
+import { messages, stories } from "@/db/schema";
 import { eq, isNull, or, and } from "drizzle-orm";
 
 export default async function handler(
@@ -21,6 +21,7 @@ export default async function handler(
       const story = await db
         .select()
         .from(stories)
+        // TODO: only get the story that user created
         .where(or(isNull(stories.authorId), eq(stories.authorId, userId)))
         .orderBy(stories.type);
 
@@ -68,6 +69,7 @@ export default async function handler(
           },
         },
       });
+
       if (!story) return res.status(200).json({ message: "找不到故事" });
       return res.status(200).json(story);
     }

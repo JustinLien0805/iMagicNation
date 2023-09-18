@@ -1,6 +1,4 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getAuth } from "@clerk/nextjs/server";
-import { GetServerSideProps } from "next";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -22,6 +20,9 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { useRef, useState, useEffect } from "react";
 import { UserNav } from "@/components/UserNav";
+import SyncLoader from "react-spinners/SyncLoader";
+import { Skeleton } from "@/components/ui/skeleton";
+import StoryLoader from "@/components/loader/StoryLoader";
 
 type Story = {
   id: number;
@@ -47,7 +48,7 @@ const formSchema = z.object({
   input: z.string().min(1, "請輸入訊息").max(50, "訊息長度至多50個字"),
 });
 
-const Story = ({ userId }: { userId: string }) => {
+const Story = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -62,7 +63,7 @@ const Story = ({ userId }: { userId: string }) => {
   };
 
   const { data, isLoading } = useQuery(
-    ["story", userId, router.query.storyId],
+    ["story", router.query.storyId],
     getStory,
     {
       onSuccess: (data) => {
@@ -98,7 +99,7 @@ const Story = ({ userId }: { userId: string }) => {
   const { mutate, isLoading: postLoading } = useMutation(postMessage, {
     onSuccess: (data) => {
       console.log(data);
-      queryClient.invalidateQueries(["story", userId, router.query.storyId]);
+      queryClient.invalidateQueries(["story", router.query.storyId]);
     },
     onError: (error) => {
       console.log(error);
@@ -107,22 +108,20 @@ const Story = ({ userId }: { userId: string }) => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     mutate(values);
+    form.setValue("input", "");
   }
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  if (!data) {
-    return <div>loading...</div>;
-  }
-  if (postLoading) {
-    return <div>post loading...</div>;
+  if (!data || isLoading) {
+    return <StoryLoader />;
   }
 
   return (
     <div
-      className="flex h-screen flex-col justify-start overflow-hidden bg-[#411A08]"
+      className="flex h-screen flex-col items-center overflow-hidden bg-[#411A08]"
       style={{
         backgroundImage: 'url("/LibraryBackground.png")',
         backgroundSize: "cover",
@@ -130,7 +129,7 @@ const Story = ({ userId }: { userId: string }) => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="flex w-full items-center bg-[#411A08] px-10 py-4">
+      <div className="flex w-full items-center bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08] px-10 py-4">
         <Image
           src={"/IMagicNationIcon.png"}
           className="mr-auto cursor-pointer"
@@ -143,17 +142,18 @@ const Story = ({ userId }: { userId: string }) => {
         />
         <UserNav />
       </div>
-      <div className="flex flex-col items-center justify-center gap-4 p-10">
+      <div className="flex max-w-7xl flex-col items-center justify-center gap-4 p-10">
         <div className="flex w-full gap-8 rounded-lg border-4 border-[#EAA916]  bg-[#411A08] p-10">
           <div
             className="flex h-96 flex-1 snap-y snap-mandatory flex-col gap-8 overflow-y-scroll"
             ref={chatContainerRef}
           >
-            {data.initDialog && data.initImage && (
+            {data.initDialog && (
               <div className="flex h-5/6 w-full flex-shrink-0 snap-start gap-4">
                 <img
-                  className="h-full w-96 flex-shrink-0 rounded-lg bg-amber-200 object-cover"
+                  className="h-full w-96 flex-shrink-0 rounded-lg bg-[#F6E0C1] object-cover"
                   src={data.initImage}
+                  alt="initImage"
                 />
                 <div className="flex w-full gap-4 border-b-2 border-[#EAA916] p-4">
                   <div className="relative h-8 w-8">
@@ -169,6 +169,7 @@ const Story = ({ userId }: { userId: string }) => {
             {data.messages.map((message) => (
               <Chat message={message} key={message.id} />
             ))}
+            {postLoading && <LoadingChat input={form.getValues().input} />}
           </div>
         </div>
         <Form {...form}>
@@ -178,13 +179,7 @@ const Story = ({ userId }: { userId: string }) => {
             }`}
             onSubmit={form.handleSubmit(onSubmit)}
           >
-            <div
-              className="flex h-32 w-full items-center space-x-4 rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-2"
-              style={{
-                background:
-                  "linear-gradient(to bottom right, #411A08 0%, rgba(107, 60, 34, 0.98) 21%, rgba(65, 26, 8, 0.97) 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #411A08 0%, rgba(107, 60, 34, 0.98) 21%, rgba(65, 26, 8, 0.97) 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #411A08 0%, rgba(107, 60, 34, 0.98) 21%, rgba(65, 26, 8, 0.97) 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #411A08 0%, rgba(107, 60, 34, 0.98) 21%, rgba(65, 26, 8, 0.97) 50%) top right / 50% 50% no-repeat",
-              }}
-            >
+            <div className="flex h-32 w-full items-center space-x-4 rounded-lg border-4 border-[#EAA916] bg-[#411A08] bg-gradient-to-t from-[#411A08] to-[#572813] p-2">
               <FormField
                 control={form.control}
                 name="input"
@@ -194,7 +189,7 @@ const Story = ({ userId }: { userId: string }) => {
                       <Input
                         {...field}
                         placeholder="輸入故事內容..."
-                        className="h-full w-full border-0 bg-transparent text-3xl text-[#F6E0C1] focus-visible:ring-0"
+                        className="h-full w-full border-0 bg-transparent text-3xl text-[#F6E0C1] placeholder:text-[#f6e0c18b] focus-visible:ring-0"
                       />
                     </FormControl>
                     <FormMessage />
@@ -206,7 +201,9 @@ const Story = ({ userId }: { userId: string }) => {
                 className="h-16 w-16 cursor-pointer bg-transparent"
               >
                 <motion.button
-                  disabled={form.formState.isSubmitting}
+                  disabled={
+                    form.formState.isSubmitting || form.getValues().input === ""
+                  }
                   style={{
                     backgroundImage: 'url("/SendBtn.png")',
                     backgroundSize: "cover",
@@ -225,21 +222,30 @@ const Story = ({ userId }: { userId: string }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { userId } = getAuth(ctx.req);
-  if (!userId) {
-    return {
-      redirect: {
-        destination: "/sign-in?redirect_url=" + ctx.resolvedUrl,
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: {
-      userId,
-    },
-  };
+const LoadingChat = ({ input }: { input: string }) => {
+  return (
+    <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start gap-4">
+      <Skeleton className="max-h-96 w-96 flex-shrink-0 rounded-lg bg-[#F6E0C1]" />
+      <div className="flex w-full flex-col">
+        <div className="flex h-40 w-full flex-shrink-0 flex-row-reverse gap-4 border-b-2 border-[#EAA916] p-4">
+          <div className="relative h-8 w-8">
+            <Image src={"/UserJewel.png"} fill alt="" />
+          </div>
+          <p className="w-full text-right text-2xl font-bold text-[#F6E0C1]">
+            {input}
+          </p>
+        </div>
+        <div className="flex min-h-[14rem] w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
+          <div className="relative h-8 w-8">
+            <Image src={"/SystemJewel.png"} fill alt="" />
+          </div>
+          <p className="w-full text-2xl font-bold text-[#F6E0C1]">
+            <SyncLoader color="#F6E0C1" />
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Story;

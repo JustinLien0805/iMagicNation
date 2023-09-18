@@ -7,11 +7,10 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useUser, useClerk } from "@clerk/nextjs";
-import { motion } from "framer-motion";
+
 import { Skeleton } from "./ui/skeleton";
 
 export function UserNav() {
@@ -44,13 +43,11 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <DropdownMenuItem>個人檔案</DropdownMenuItem>
+          <DropdownMenuItem>設定</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => void signOut()}>
-          Log out
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => void signOut()}>登出</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

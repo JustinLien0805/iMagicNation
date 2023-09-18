@@ -11,9 +11,9 @@ type Message = {
 
 const Chat = ({ message }: { message: Message }) => {
   return (
-    <div className="flex w-full flex-shrink-0 snap-start gap-4">
+    <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start gap-4">
       <img
-        className="max-h-96 w-96 flex-shrink-0 rounded-lg bg-amber-200 object-cover"
+        className="max-h-96 w-96 flex-shrink-0 rounded-lg bg-[#F6E0C1] object-cover"
         src={message.imageSrc}
       />
       <div className="flex w-full flex-col">
@@ -25,7 +25,7 @@ const Chat = ({ message }: { message: Message }) => {
             {message.input}
           </p>
         </div>
-        <div className="flex h-56 w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
+        <div className="flex min-h-[14rem] w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
           <div className="relative h-8 w-8">
             <Image src={"/SystemJewel.png"} fill alt="" />
           </div>

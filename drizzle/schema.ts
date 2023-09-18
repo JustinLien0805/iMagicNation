@@ -20,11 +20,3 @@ export const stories = mysqlTable("stories", {
 	initDialog: varchar("initDialog", { length: 191 }),
 	initImage: text("initImage"),
 });
-
-export const users = mysqlTable("users", {
-	id: serial("id").primaryKey().notNull(),
-	email: text("email").notNull(),
-	password: text("password").notNull(),
-	userId: text("userId").notNull(),
-	timestamp: text("timestamp").notNull(),
-});

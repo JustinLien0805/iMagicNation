@@ -2,7 +2,7 @@ import StorybookIcon from "@/assets/StorybookIcon.png";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Skeleton } from "@/components/ui/skeleton";
+
 interface Story {
   id: string;
   // initDialog: string;
@@ -25,13 +25,7 @@ type CategoryRowProps = {
 const CategoryRow = ({ type, storys }: CategoryRowProps) => {
   const router = useRouter();
   return (
-    <div
-      className="w-full rounded-lg border-2 border-[#EAA916] px-4 pt-4 text-white"
-      style={{
-        background:
-          "linear-gradient(to bottom right, #411A08 0%, rgba(107, 60, 34, 0.98) 21%, rgba(65, 26, 8, 0.97) 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #411A08 0%, rgba(107, 60, 34, 0.98) 21%, rgba(65, 26, 8, 0.97) 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #411A08 0%, rgba(107, 60, 34, 0.98) 21%, rgba(65, 26, 8, 0.97) 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #411A08 0%, rgba(107, 60, 34, 0.98) 21%, rgba(65, 26, 8, 0.97) 50%) top right / 50% 50% no-repeat",
-      }}
-    >
+    <div className="w-full rounded-lg border-2 border-[#EAA916] bg-gradient-to-t from-[#411A08] to-[#572813] px-4 pt-4 text-white">
       <h2
         className="inline-block cursor-pointer rounded-lg border-4 border-[#411A08] px-2 py-3 text-xl font-semibold text-[#411A08] "
         style={{

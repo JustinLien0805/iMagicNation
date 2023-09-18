@@ -37,13 +37,13 @@ export const messageRelations = relations(messages, ({ one }) => ({
   }),
 }));
 
-export const users = mysqlTable("users", {
-  id: serial("id").primaryKey().notNull(),
-  email: text("email").notNull(),
-  password: text("password").notNull(),
-  userId: text("userId").notNull(),
-  timestamp: text("timestamp").notNull(),
-});
+// export const users = mysqlTable("users", {
+//   id: serial("id").primaryKey().notNull(),
+//   email: text("email").notNull(),
+//   password: text("password").notNull(),
+//   userId: text("userId").notNull(),
+//   timestamp: text("timestamp").notNull(),
+// });
 
 // import {
 //   mysqlTable,

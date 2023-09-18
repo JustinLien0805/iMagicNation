@@ -43,7 +43,7 @@ const Library = () => {
 
   return (
     <>
-      <div className="flex min-h-screen flex-col bg-[#411A08]">
+      <div className="flex min-h-screen flex-col bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08]">
         <div className="flex items-center p-4 px-10">
           <Image
             src={"/iMagicNationIcon.png"}
