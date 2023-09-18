@@ -130,7 +130,7 @@ const EthicalStory = () => {
     >
       <div className="flex w-full items-center bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08] px-10 py-4">
         <Image
-          src={"/IMagicNationIcon.png"}
+          src={"/iMagicNationIcon.png"}
           className="mr-auto cursor-pointer"
           width={420}
           height={80}

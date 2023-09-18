@@ -1,4 +1,4 @@
-import StorybookIcon from "@/assets/StorybookIcon.png";
+import StoryBookIcon from "@/assets/StoryBookIcon.png";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -47,7 +47,7 @@ const CategoryRow = ({ type, storys }: CategoryRowProps) => {
               router.push(`/story/${type}/${story.id}`);
             }}
           >
-            <Image src={"/StorybookIcon.png"} alt="" height={112} width={118} />
+            <Image src={"/StoryBookIcon.png"} alt="book" height={112} width={118} />
             <p>{story.title}</p>
           </motion.div>
         ))}
