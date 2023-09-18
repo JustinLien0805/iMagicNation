@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { motion } from "framer-motion";
 import { UserNav } from "@/components/UserNav";
 
-const home = () => {
+const Home = () => {
   const router = useRouter();
   return (
     <div
@@ -59,4 +59,4 @@ const home = () => {
   );
 };
 
-export default home;
+export default Home;

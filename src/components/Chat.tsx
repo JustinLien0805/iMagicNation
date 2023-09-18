@@ -15,6 +15,7 @@ const Chat = ({ message }: { message: Message }) => {
       <img
         className="max-h-96 w-96 flex-shrink-0 rounded-lg bg-[#F6E0C1] object-cover"
         src={message.imageSrc}
+        alt="image"
       />
       <div className="flex w-full flex-col">
         <div className="flex h-40 w-full flex-shrink-0 flex-row-reverse gap-4 border-b-2 border-[#EAA916] p-4">
