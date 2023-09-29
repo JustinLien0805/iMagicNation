@@ -24,6 +24,7 @@ import SyncLoader from "react-spinners/SyncLoader";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Toaster } from "@/components/ui/toaster";
 import StoryLoader from "@/components/loader/StoryLoader";
+import DictTooltip from "@/components/DictTooltip";
 
 type Story = {
   id: number;
@@ -33,6 +34,8 @@ type Story = {
   initDialog?: string;
   initImage?: string;
   messages: Message[];
+  words: string[];
+  phrases: string[];
 };
 
 type Message = {
@@ -43,6 +46,7 @@ type Message = {
   reply: string;
   imageSrc: string;
   createdAt: Date;
+  blobImage: Blob;
 };
 
 const formSchema = z.object({
@@ -56,10 +60,11 @@ const Story = () => {
   const { toast } = useToast();
 
   const getStory = async () => {
-    const { data }: { data: Story[] } = await axios.get("/api/story", {
+    const { data }: { data: Story } = await axios.get("/api/story", {
       params: { storyId: router.query.storyId },
     });
-    return data[0];
+    console.log(data);
+    return data;
   };
 
   const { data, isLoading, refetch } = useQuery(
@@ -180,14 +185,14 @@ const Story = () => {
           />
           <UserNav />
         </div>
-        <div className="flex max-w-7xl flex-col items-center justify-center gap-4 p-10">
-          <div className="flex w-full gap-8 rounded-lg border-4 border-[#EAA916]  bg-[#411A08] p-10">
+        <div className="flex w-[80rem] flex-col items-center justify-center gap-4 p-10">
+          <div className="flex w-full gap-8 rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-10">
             <div
               className="flex h-96 flex-1 snap-y snap-mandatory flex-col gap-8 overflow-y-scroll"
               ref={chatContainerRef}
             >
               {data.initDialog && (
-                <div className="flex h-5/6 w-full flex-shrink-0 snap-start gap-4">
+                <div className="flex h-5/6 flex-shrink-0 snap-start gap-4">
                   <img
                     className="h-full w-96 flex-shrink-0 rounded-lg bg-[#F6E0C1] object-cover"
                     src={data.initImage}
@@ -197,15 +202,26 @@ const Story = () => {
                     <div className="relative h-8 w-8">
                       <Image src={"/SystemJewel.png"} fill alt="SystemJewel" />
                     </div>
-                    <p className="w-full text-2xl font-bold text-[#F6E0C1]">
-                      {data.initDialog}
-                    </p>
+                    {/* <p className="w-full text-2xl font-bold leading-10 text-[#F6E0C1]"></p> */}
+                    <DictTooltip
+                      text={data.initDialog}
+                      wordsToHighlight={[
+                        ...data.words,
+                        ...data.phrases,
+                        ...["哈利"],
+                      ]}
+                    />
                   </div>
                 </div>
               )}
 
               {data.messages.map((message) => (
-                <Chat message={message} key={message.id} />
+                <Chat
+                  message={message}
+                  key={message.id}
+                  words={data.words}
+                  phrases={data.phrases}
+                />
               ))}
               {postLoading && <LoadingChat input={form.getValues().input} />}
             </div>

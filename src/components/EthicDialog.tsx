@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import { clsx } from "clsx";
-import StoryForm from "./form/StoryForm";
 import LectureStoryForm from "./form/LectureStoryForm";
 
 const STAGES = ["第一關", "第二關", "第三關", "第四關", "第五關", "第六關"];
@@ -48,13 +47,11 @@ const EthicDialog = ({
       <DialogTrigger asChild>
         <Button
           className={clsx(
-            "cursor-pointer px-2 py-3 text-2xl font-semibold text-[#411A08]",
+            "inline-block h-16 cursor-pointer rounded-lg border-4 border-[#411A08] px-2 py-3 text-xl font-semibold text-[#411A08]",
             position
           )}
           asChild
           style={{
-            borderRadius: "0.75rem",
-            border: "5px solid #411A08",
             background:
               "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
             boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",

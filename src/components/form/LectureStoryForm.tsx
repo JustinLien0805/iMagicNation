@@ -1,17 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronsUpDown } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
+
 import {
   Form,
   FormControl,
@@ -21,23 +12,21 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
-import { publishers, GRADES } from "@/constant/Lectures";
+import { GRADES, PUBLISHERS, LessonIdMapping } from "@/constant/Lectures";
 import { motion } from "framer-motion";
 import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import FormLoader from "@/components/loader/FormLoader";
 
 const FormSchema = z.object({
   publisher: z.string({
@@ -46,258 +35,170 @@ const FormSchema = z.object({
   grade: z.string({
     required_error: "Please select a grade.",
   }),
-  lecture: z.string({
-    required_error: "Please select a lecture.",
+  lesson: z.string({
+    required_error: "Please select a lesson.",
   }),
 });
+
+interface LessonData {
+  [publisher: string]: {
+    [grade: string]: string[];
+  };
+}
 
 export default function LetureStoryForm() {
   const router = useRouter();
   const { toast } = useToast();
-
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-  });
-
-  const createStroy = async (formData: z.infer<typeof FormSchema>) => {
-    const type = formData.publisher + formData.grade + formData.lecture;
-    const { data } = await axios.post("api/story", {
-      type,
-      title: "新故事2",
-    });
+  const getLessons = async () => {
+    const { data }: { data: LessonData } = await axios.get("api/lecture");
 
     return data;
   };
 
-  const { mutate, isLoading } = useMutation(createStroy, {
+  const { data, isLoading } = useQuery(["lessons"], getLessons, {
     onSuccess: (data) => {
-      router.push(`/story/我的故事/${data.storyId}`);
+      console.log(data);
     },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "請先登入",
-        action: <ToastAction altText="Try again">登入</ToastAction>,
-      });
+  });
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      publisher: "康軒",
+      grade: "一上",
+      lesson: "第一課",
     },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    mutate(data);
-    const type = data.publisher + data.grade + data.lecture;
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{type}</code>
-        </pre>
-      ),
-    });
+    const lessonId = LessonIdMapping[data.lesson];
+    const type = data.publisher + data.grade;
+    router.push(`/story/${type}/${lessonId}`);
   }
 
-  function findLectures(publisherLabel: string, gradeLabel: string) {
-    if (!publisherLabel || !gradeLabel) return [];
-
-    const publisher = publishers.find(
-      (publisher) => publisher.label === publisherLabel
-    );
-
-    const grade = publisher?.grades.find((grade) => grade.label === gradeLabel);
-    return grade?.lectures;
-  }
+  if (isLoading) return <FormLoader />;
+  if (!data) return <div>Loading...</div>;
+  console.log(form.getValues("publisher"));
+  console.log(form.getValues("grade"));
+  console.log(data["康軒"]["一上"]);
 
   return (
-    <Card className="w-[350px] bg-[#412C2B] text-[#F6E0C1]">
-      <CardHeader>
-        <CardTitle>開啟故事</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="publisher"
-              render={({ field }) => (
-                <FormItem className="flex w-full flex-col">
-                  <FormLabel>出版社</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
+    <>
+      <Card className="w-[350px] border-2 border-[#EAA916] bg-gradient-to-t from-[#411A08] to-[#572813] text-[#F6E0C1]">
+        <CardHeader>
+          <CardTitle>開啟故事</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="publisher"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>出版社</FormLabel>
+                    <Select
+                      onValueChange={(e) => {
+                        field.onChange(e);
+                        form.resetField("grade");
+                        form.resetField("lesson");
+                      }}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            "w-full justify-between text-[#412C2B]",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ?? "選擇出版社"}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
+                        <SelectTrigger className="ring-[border-2 border-[#EAA916]] border-[#EAA916] bg-[#F6E0C1] text-[#411a08]">
+                          <SelectValue
+                            placeholder="選擇出版社"
+                            className="text-[#411A08]"
+                          />
+                        </SelectTrigger>
                       </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="p-0">
-                      <Command>
-                        <CommandInput placeholder="尋找出版社..." />
-                        <CommandEmpty>找不到出版社</CommandEmpty>
-                        <CommandGroup className="w-48">
-                          {publishers.map((publisher) => (
-                            <CommandItem
-                              value={publisher.label}
-                              key={publisher.label}
-                              onSelect={(value) => {
-                                form.setValue("publisher", value);
-                                form.resetField("lecture");
-                                form.trigger("publisher");
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  publisher.label === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {publisher.label}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="grade"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>年級</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
+                      <SelectContent>
+                        {PUBLISHERS.map((publisher) => (
+                          <SelectItem
+                            value={publisher}
+                            className="text-[#411A08]"
+                          >
+                            {publisher}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="grade"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>年級</FormLabel>
+                    <Select
+                      onValueChange={(e) => {
+                        field.onChange(e);
+                        form.resetField("lesson");
+                      }}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            "w-full justify-between text-[#412C2B]",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ?? "選擇年級"}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
+                        <SelectTrigger className="bg-[#F6E0C1] text-[#411a08]">
+                          <SelectValue placeholder="選擇年級" />
+                        </SelectTrigger>
                       </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
-                      <Command>
-                        <CommandInput placeholder="搜尋年級..." />
-                        <CommandEmpty>找不到出版社</CommandEmpty>
-                        <ScrollArea className="h-48 w-full">
-                          <CommandGroup className="w-full">
-                            {GRADES.map((grade) => (
-                              <CommandItem
-                                value={grade}
-                                key={grade}
-                                onSelect={(value) => {
-                                  form.setValue("grade", value);
-                                  form.resetField("lecture");
-                                  form.trigger("grade");
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    grade === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                                {grade}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </ScrollArea>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="lecture"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>課程</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
+                      <SelectContent className="text-[#411A08]">
+                        {GRADES.map((grade) => (
+                          <SelectItem value={grade}>{grade}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lesson"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>課程</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            "w-full justify-between text-[#412C2B]",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ?? "選擇課程"}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
+                        <SelectTrigger className="bg-[#F6E0C1] text-[#411a08]">
+                          <SelectValue placeholder="選擇年級" />
+                        </SelectTrigger>
                       </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="p-0">
-                      <Command>
-                        <CommandInput placeholder="搜尋課程..." />
-                        <CommandEmpty>找不到課程</CommandEmpty>
-                        <CommandGroup>
-                          {findLectures(
-                            form.getValues("publisher"),
-                            form.getValues("grade")
-                          )?.map((lecture) => (
-                            <CommandItem
-                              value={lecture.title}
-                              key={lecture.title}
-                              onSelect={(value) => {
-                                form.setValue("lecture", value);
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  lecture.title === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {lecture.title}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Button
-              type="submit"
-              asChild
-              className="w-full bg-[#F6E0C1] text-[#412C2B] hover:scale-105"
-            >
-              <motion.button>開啟故事</motion.button>
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+                      <SelectContent className="text-[#411A08]">
+                        {data[form.getValues("publisher")][
+                          form.getValues("grade")
+                        ].map((lesson, i) => (
+                          <SelectItem value={lesson}>{lesson}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                asChild
+                className="inline-block h-full w-full cursor-pointer self-center rounded-lg border-4 border-[#411A08] px-2 py-3 text-2xl font-bold text-[#411A08]"
+                style={{
+                  background:
+                    "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+                  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+              >
+                <motion.button>開啟故事</motion.button>
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </>
   );
 }

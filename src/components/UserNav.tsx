@@ -42,11 +42,6 @@ export function UserNav() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>個人檔案</DropdownMenuItem>
-          <DropdownMenuItem>設定</DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => void signOut()}>登出</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

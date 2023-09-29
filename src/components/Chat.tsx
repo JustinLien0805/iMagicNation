@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { Volume2 } from "lucide-react";
+import DictTooltip from "./DictTooltip";
 type Message = {
   storyId: string;
   id: string;
@@ -9,7 +11,26 @@ type Message = {
   createdAt: Date;
 };
 
-const Chat = ({ message }: { message: Message }) => {
+const Chat = ({
+  message,
+  words,
+  phrases,
+}: {
+  message: Message;
+  words: string[];
+  phrases: string[];
+}) => {
+  function highlightWords(text: string, words: string[]) {
+    words.forEach((word) => {
+      // No word boundaries needed for Chinese characters
+      const regex = new RegExp(word, "g");
+      text = text.replace(
+        regex,
+        (match) => `<span class="border-red-500 border-b-2">${match}</span>`
+      );
+    });
+    return text;
+  }
   return (
     <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start gap-4">
       <img
@@ -22,7 +43,7 @@ const Chat = ({ message }: { message: Message }) => {
           <div className="relative h-8 w-8">
             <Image src={"/UserJewel.png"} fill alt="" />
           </div>
-          <p className="w-full text-right text-2xl font-bold text-[#F6E0C1]">
+          <p className="w-full text-right text-2xl font-bold leading-10 tracking-wide text-[#F6E0C1]">
             {message.input}
           </p>
         </div>
@@ -30,9 +51,10 @@ const Chat = ({ message }: { message: Message }) => {
           <div className="relative h-8 w-8">
             <Image src={"/SystemJewel.png"} fill alt="" />
           </div>
-          <p className="w-full text-2xl font-bold text-[#F6E0C1]">
-            {message.reply}
-          </p>
+          <DictTooltip
+            text={message.reply}
+            wordsToHighlight={[...words, ...phrases, ...["什麼"]]}
+          />
         </div>
       </div>
     </div>

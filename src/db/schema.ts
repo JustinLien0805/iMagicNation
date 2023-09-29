@@ -3,20 +3,45 @@ import {
   serial,
   text,
   timestamp,
+  varbinary,
   varchar,
+  int,
+  primaryKey,
 } from "drizzle-orm/mysql-core";
 import { relations } from "drizzle-orm";
 
 export const content = mysqlTable("content", {
   id: serial("id").primaryKey().notNull(),
-  grade: text("grade"),
-  version: text("version"),
-  lesson: text("lesson"),
   title: text("title"),
   word: text("word"),
   phrase: text("phrase"),
   type: text("type"),
 });
+
+export const ethic = mysqlTable(
+  "ethic",
+  {
+    storyId: int("storyId").notNull(),
+    type: varchar("type", {
+      length: 191,
+    }).notNull(),
+    partId: int("partId").notNull(),
+    partDetail: text("part_detail"),
+    ans1: text("ans_1"),
+    ans2: text("ans_2"),
+    ans3: text("ans_3"),
+    ans4: text("ans_4"),
+    nextPartId1: int("next_part_id_1"),
+    nextPartId2: int("next_part_id_2"),
+    nextPartId3: int("next_part_id_3"),
+    nextPartId4: int("next_part_id_4"),
+  },
+  (table) => {
+    return {
+      pk: primaryKey(table.storyId, table.type, table.partId),
+    };
+  }
+);
 
 export const messages = mysqlTable("messages", {
   id: serial("id").primaryKey().notNull(),
@@ -28,6 +53,7 @@ export const messages = mysqlTable("messages", {
   authorId: varchar("authorId", { length: 191 }),
   word: text("word"),
   phrase: text("phrase"),
+  blobType: text("blobImage"),
 });
 
 export const stories = mysqlTable("stories", {

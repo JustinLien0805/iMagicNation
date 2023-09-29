@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { db } from "@/db/index";
-import { messages, stories } from "@/db/schema";
+import { stories, content } from "@/db/schema";
 import { eq, isNull, or, and } from "drizzle-orm";
 
 export default async function handler(
@@ -62,16 +62,50 @@ export default async function handler(
 
     if (storyId && userId) {
       const story = await db.query.stories.findMany({
+        columns: {
+          id: true,
+          title: true,
+          type: true,
+          authorId: false,
+          initDialog: true,
+          initImage: true,
+        },
         where: (stories) => eq(stories.id, parseInt(storyId)),
         with: {
           messages: {
+            columns: {
+              id: true,
+              input: true,
+              reply: true,
+              imageSrc: true,
+              createdAt: true,
+              storyId: true,
+              authorId: false,
+              word: true,
+              phrase: true,
+              blobType: true,
+            },
             where: (messages) => eq(messages.authorId, userId),
           },
         },
       });
 
+      const wordsAndPhrases = await db
+        .select({
+          words: content.word,
+          phrases: content.phrase,
+        })
+        .from(content)
+        .where(eq(content.title, story[0].title));
+
+      const completeStory = {
+        ...story[0],
+        words: wordsAndPhrases.map((item) => item.words),
+        phrases: wordsAndPhrases.map((item) => item.phrases),
+      };
+      console.log(completeStory);
       if (!story) return res.status(200).json({ message: "找不到故事" });
-      return res.status(200).json(story);
+      return res.status(200).json(completeStory);
     }
   }
 }
