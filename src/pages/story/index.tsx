@@ -24,7 +24,7 @@ interface Story {
 const Library = () => {
   const router = useRouter();
   const fetchList = async (): Promise<Story[]> => {
-    const { data }: { data: Story[] } = await axios.post("api/story");
+    const { data }: { data: Story[] } = await axios.post("/api/story");
     return data;
   };
   const { data, isSuccess, isLoading } = useQuery(["storyList"], fetchList);

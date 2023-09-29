@@ -1,8 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { db } from "@/db/index";
-import { messages } from "@/db/schema";
 import { getAuth } from "@clerk/nextjs/server";
-import { eq, and } from "drizzle-orm";
 import axios from "axios";
 export default async function handler(
   req: NextApiRequest,

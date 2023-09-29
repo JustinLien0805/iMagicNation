@@ -6,28 +6,44 @@ import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 import { UserNav } from "@/components/UserNav";
-import { get } from "http";
 
 interface Story {
   id: string;
   initDialog: string;
   initImage: string;
-  // letters: string;
-  // meaning: string;
-  // phrases: string;
-  // remainCount: number;
-  // storyId: string;
   title: string;
   type: string;
-  authorId: string | null;
 }
 const Library = () => {
   const router = useRouter();
-  const fetchList = async (): Promise<Story[]> => {
-    const { data }: { data: Story[] } = await axios.post("api/story");
+  const queryKey = "category";
+
+  let queryValue = router.query[queryKey] as string;
+
+  const regexPattern = /\/story\/category\/([^\/?&]+)/;
+  console.log(queryValue);
+  if (!queryValue) {
+    const matches = router.asPath.match(regexPattern);
+    console.log(matches);
+
+    if (matches && matches[1]) {
+      queryValue = decodeURIComponent(matches[1]);
+    }
+  }
+
+  const fetchList = async () => {
+    const { data }: { data: Story[] } = await axios.get("/api/story/category", {
+      params: {
+        category: queryValue,
+      },
+    });
     return data;
   };
-  const { data, isSuccess, isLoading } = useQuery(["storyList"], fetchList);
+  const { data, isSuccess, isLoading } = useQuery(["category"], fetchList, {
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
 
   // Extract the first four words of a string
   const getFirstFourWords = (str: string) => {
