@@ -8,7 +8,7 @@ export default async function handler(
   console.log("run");
   try {
     const definition = await axios.get(
-      "https://pedia.cloud.edu.tw/api/v2/detail?term=%E6%A8%82%E4%B8%8D%E6%80%9D%E8%9C%80&api_key=9b055b6c-c8d6-414f-9e3c-f4822ff7e30c"
+      "https://pedia.cloud.edu.tw/api/v2/detail?term=%E6%A8%82%E4%B8%8D%E6%80%9D%E8%9C%80&api_key="
     );
     console.log(definition);
 

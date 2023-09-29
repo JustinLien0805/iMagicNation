@@ -116,6 +116,7 @@ export default function LetureStoryForm() {
                       <SelectContent>
                         {PUBLISHERS.map((publisher) => (
                           <SelectItem
+                            key={publisher}
                             value={publisher}
                             className="text-[#411A08]"
                           >
@@ -148,7 +149,9 @@ export default function LetureStoryForm() {
                       </FormControl>
                       <SelectContent className="text-[#411A08]">
                         {GRADES.map((grade) => (
-                          <SelectItem value={grade}>{grade}</SelectItem>
+                          <SelectItem key={grade} value={grade}>
+                            {grade}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -174,8 +177,10 @@ export default function LetureStoryForm() {
                       <SelectContent className="text-[#411A08]">
                         {data[form.getValues("publisher")][
                           form.getValues("grade")
-                        ].map((lesson, i) => (
-                          <SelectItem value={lesson}>{lesson}</SelectItem>
+                        ].map((lesson) => (
+                          <SelectItem value={lesson} key={lesson}>
+                            {lesson}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
