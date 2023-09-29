@@ -6,17 +6,11 @@ import axios from "axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 import { UserNav } from "@/components/UserNav";
-import { get } from "http";
-
+import { Button } from "@/components/ui/button";
 interface Story {
   id: string;
   initDialog: string;
   initImage: string;
-  // letters: string;
-  // meaning: string;
-  // phrases: string;
-  // remainCount: number;
-  // storyId: string;
   title: string;
   type: string;
   authorId: string | null;
@@ -38,7 +32,6 @@ const Library = () => {
   const uniqueTypes = [
     ...new Set(data?.map((item) => getFirstFourWords(item.type))),
   ];
-  console.log(uniqueTypes);
 
   return (
     <>
@@ -65,6 +58,75 @@ const Library = () => {
             backgroundRepeat: "no-repeat",
           }}
         >
+          {/* <Button
+            className="relative inline-block h-16 w-48 cursor-pointer self-start rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08]"
+            style={{
+              background:
+                "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+              boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            <Image
+              src={"/StoryBookIcon.png"}
+              alt="book"
+              height={95}
+              width={102}
+              className="absolute -left-10 -top-12"
+            />
+            小說
+          </Button>
+          <Button
+            className="relative inline-block h-16 w-48 cursor-pointer self-start rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08]"
+            style={{
+              background:
+                "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+              boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            <Image
+              src={"/StoryBookIcon.png"}
+              alt="book"
+              height={95}
+              width={102}
+              className="absolute -left-10 -top-12"
+            />
+            康軒
+          </Button>
+          <Button
+            className="relative inline-block h-16 w-48 cursor-pointer self-start rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08]"
+            style={{
+              background:
+                "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+              boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            <Image
+              src={"/StoryBookIcon.png"}
+              alt="book"
+              height={95}
+              width={102}
+              className="absolute -left-10 -top-12"
+            />
+            翰林
+          </Button>
+          <Button
+            className="relative inline-block h-16 w-48 cursor-pointer self-start rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08]"
+            style={{
+              background:
+                "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+              boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            <Image
+              src={"/StoryBookIcon.png"}
+              alt="book"
+              height={95}
+              width={102}
+              className="absolute -left-10 -top-12"
+            />
+            南一
+          </Button> */}
+
           {isLoading && (
             <>
               <Skeleton className="h-48 w-full bg-amber-950" />
