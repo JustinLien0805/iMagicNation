@@ -103,7 +103,7 @@ export default async function handler(
         words: wordsAndPhrases.map((item) => item.words),
         phrases: wordsAndPhrases.map((item) => item.phrases),
       };
-      console.log(completeStory);
+
       if (!story) return res.status(200).json({ message: "找不到故事" });
       return res.status(200).json(completeStory);
     }

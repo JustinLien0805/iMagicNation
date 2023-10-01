@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 
 import { motion } from "framer-motion";
-import StoryLoader from "@/components/loader/StoryLoader";
+import EthicLoader from "@/components/loader/EthicLoader";
 import { useRef, useState } from "react";
 import { UserNav } from "@/components/UserNav";
 
@@ -21,6 +21,7 @@ type Ethic = {
   nextPartId2?: number;
   nextPartId3?: number;
   nextPartId4?: number;
+  imageSrc: string;
 };
 
 type Option = {
@@ -74,7 +75,7 @@ const EthicalStory = () => {
     }
   );
 
-  if (isLoading) return <StoryLoader />;
+  if (isLoading) return <EthicLoader />;
   if (!data) return <div>no data</div>;
   return (
     <div
@@ -106,7 +107,10 @@ const EthicalStory = () => {
             ref={chatContainerRef}
           >
             <div className="flex h-full w-full gap-4">
-              <div className="h-96 w-96 flex-shrink-0 rounded-lg bg-[#F6E0C1] object-cover" />
+              <img
+                src={data.imageSrc}
+                className="h-96 w-96 flex-shrink-0 rounded-lg bg-[#F6E0C1] object-cover"
+              />
               <div className="flex w-full gap-4 p-4">
                 <div className="relative h-8 w-8 flex-shrink-0">
                   <Image src={"/SystemJewel.png"} fill alt="SystemJewel" />
@@ -142,28 +146,6 @@ const EthicalStory = () => {
             </div>
           </div>
         </div>
-        {/* <div className="grid w-full grid-cols-2 gap-4">
-          {options?.map((option, index) => {
-            return (
-              <motion.button
-                className="inline-block cursor-pointer self-center rounded-lg border-4 border-[#411A08] px-2 py-3 text-lg font-bold text-[#411A08]"
-                style={{
-                  background:
-                    "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
-                  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                key={index}
-                onClick={() => {
-                  setPardId(option.nextPartId!);
-                }}
-              >
-                {option.ans}
-              </motion.button>
-            );
-          })}
-        </div> */}
       </div>
     </div>
   );

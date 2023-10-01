@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { Volume2 } from "lucide-react";
-import DictTooltip from "./DictTooltip";
+import DictPopover from "./DictPopover";
 type Message = {
   storyId: string;
   id: string;
@@ -20,17 +19,6 @@ const Chat = ({
   words: string[];
   phrases: string[];
 }) => {
-  function highlightWords(text: string, words: string[]) {
-    words.forEach((word) => {
-      // No word boundaries needed for Chinese characters
-      const regex = new RegExp(word, "g");
-      text = text.replace(
-        regex,
-        (match) => `<span class="border-red-500 border-b-2">${match}</span>`
-      );
-    });
-    return text;
-  }
   return (
     <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start gap-4">
       <img
@@ -51,10 +39,7 @@ const Chat = ({
           <div className="relative h-8 w-8">
             <Image src={"/SystemJewel.png"} fill alt="" />
           </div>
-          <DictTooltip
-            text={message.reply}
-            wordsToHighlight={[...words, ...phrases, ...["什麼"]]}
-          />
+          <DictPopover text={message.reply} wordsToHighlight={[...words]} />
         </div>
       </div>
     </div>

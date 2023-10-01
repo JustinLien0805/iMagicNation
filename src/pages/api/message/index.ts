@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   const { storyId, input }: { storyId: string; input: string } = req.body;
   const { userId } = getAuth(req);
-  console.log(userId);
+
   if (!userId) {
     return res.status(401).json({ message: "請先登入" });
   }
@@ -28,29 +28,9 @@ export default async function handler(
         },
       }
     );
-    console.log("postMessage", postMessage.data);
+
     return res.status(200).json({ message: "成功", data: postMessage.data });
   } catch (e) {
     console.log(e);
   }
-
-  // const chats = await db
-  //   .select({ input: messages.input, reply: messages.reply })
-  //   .from(messages)
-  //   .where(and(eq(messages.storyId, storyId), eq(messages.authorId, userId)));
-
-  // console.log(chats);
-
-  // TODO connect to ChatGPT to generate replay: fetch all previous messages, concat them, and send to ChatGPT
-  // TODO if count = 9, create ending message
-  // TODO connect to StableDiffusion to generate image
-
-  // const createMessage = await db.insert(messages).values({
-  //   storyId,
-  //   authorId: userId,
-  //   input,
-  //   reply: "reply",
-  //   imageSrc: "imageSrc",
-  // });
-  // console.log(createMessage);
 }

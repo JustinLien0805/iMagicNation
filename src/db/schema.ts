@@ -35,6 +35,7 @@ export const ethic = mysqlTable(
     nextPartId2: int("next_part_id_2"),
     nextPartId3: int("next_part_id_3"),
     nextPartId4: int("next_part_id_4"),
+    imageSrc: text("imageSrc"),
   },
   (table) => {
     return {

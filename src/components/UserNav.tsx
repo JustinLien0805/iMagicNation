@@ -29,7 +29,7 @@ export function UserNav() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-56 border-[#F6E0C1] bg-[#412C2B] text-[#F6E0C1]"
+        className="w-56 border-2 border-[#EAA916] bg-gradient-to-t from-[#411A08] to-[#572813] text-[#F6E0C1]"
         align="end"
         forceMount
       >
@@ -41,8 +41,13 @@ export function UserNav() {
             </p>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => void signOut()}>登出</DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-[#EAA916]" />
+        <DropdownMenuItem
+          onClick={() => void signOut()}
+          className="cursor-pointer focus:bg-[#F6E0C1]"
+        >
+          登出
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

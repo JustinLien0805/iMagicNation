@@ -55,11 +55,7 @@ export default function LetureStoryForm() {
     return data;
   };
 
-  const { data, isLoading } = useQuery(["lessons"], getLessons, {
-    onSuccess: (data) => {
-      console.log(data);
-    },
-  });
+  const { data, isLoading } = useQuery(["lessons"], getLessons);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -78,9 +74,6 @@ export default function LetureStoryForm() {
 
   if (isLoading) return <FormLoader />;
   if (!data) return <div>Loading...</div>;
-  console.log(form.getValues("publisher"));
-  console.log(form.getValues("grade"));
-  console.log(data["康軒"]["一上"]);
 
   return (
     <>

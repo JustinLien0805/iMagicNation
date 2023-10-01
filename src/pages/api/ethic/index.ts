@@ -24,7 +24,6 @@ export default async function handler(
         .where(eq(ethic.storyId, parseInt(storyId)))
         .orderBy(asc(ethic.partId));
 
-      console.log(firstPart[0]);
       return res.status(200).json(firstPart[0]);
     }
     if (storyId && nextPartId) {
@@ -32,7 +31,7 @@ export default async function handler(
         .select()
         .from(ethic)
         .where(eq(ethic.partId, parseInt(nextPartId)));
-      console.log(part);
+
       return res.status(200).json(part[0]);
     }
   }
