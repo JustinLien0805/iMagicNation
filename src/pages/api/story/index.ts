@@ -110,11 +110,11 @@ export default async function handler(
   }
   if (method === "DELETE") {
     const storyId = req.query.storyId as string;
-    console.log(storyId);
+
     const deleteMessages = await db
       .delete(messages)
       .where(and(eq(messages.storyId, storyId), eq(messages.authorId, userId)));
-    console.log(deleteMessages);
+
     return res.status(200).json({ message: "刪除成功" });
   }
 }
