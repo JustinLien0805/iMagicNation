@@ -126,7 +126,7 @@ const EthicDialogContent = React.forwardRef<
     >
       {children}
       <DialogPrimitive.Close
-        className="absolute right-4 top-4 rounded-sm px-2 py-3 text-2xl font-semibold text-[#411A08] ring-offset-background transition transition-opacity duration-150 ease-out hover:scale-105 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring  focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+        className="absolute right-4 top-4 rounded-sm px-2 py-3 text-2xl font-semibold text-[#411A08] ring-offset-background  transition-opacity duration-150 ease-out hover:scale-105 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring  focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
         style={{
           borderRadius: "0.75rem",
           border: "5px solid #411A08",
