@@ -29,9 +29,13 @@ const Library = () => {
   };
 
   // Get unique types based on the first four words
-  const uniqueTypes = [
+  let uniqueTypes = [
     ...new Set(data?.map((item) => getFirstFourWords(item.type))),
   ];
+  if (uniqueTypes.includes("小說")) {
+    uniqueTypes = uniqueTypes.filter((item) => item !== "小說");
+    uniqueTypes.unshift("小說");
+  }
 
   return (
     <>

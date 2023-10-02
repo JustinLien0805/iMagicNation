@@ -30,11 +30,22 @@ import { useRef, useEffect, useState } from "react";
 import { UserNav } from "@/components/UserNav";
 import SyncLoader from "react-spinners/SyncLoader";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Toaster } from "@/components/ui/toaster";
 import StoryLoader from "@/components/loader/StoryLoader";
 import DictPopover from "@/components/DictPopover";
 import ScaleLoader from "react-spinners/ScaleLoader";
-import { is } from "drizzle-orm";
+import { Toaster } from "@/components/ui/toaster";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 type Story = {
   id: number;
   title: string;
@@ -126,7 +137,8 @@ const Story = () => {
   const { mutate, isLoading: postLoading } = useMutation(postMessage, {
     onSuccess: (data) => {
       refetch();
-      form.setValue("input", "");
+
+      form.reset();
       queryClient.invalidateQueries(["story", router.query.storyId]);
     },
     onError: (error) => {
@@ -188,6 +200,29 @@ const Story = () => {
     },
   });
 
+  const deleteStory = async () => {
+    const { data }: { data: Story } = await axios.delete("/api/story", {
+      params: { storyId: router.query.storyId },
+    });
+
+    return data;
+  };
+
+  const { mutate: deleteStoryMutate } = useMutation(deleteStory, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["story", router.query.storyId]);
+      toast({
+        className: "bg-green-500 border-green-500 text-white",
+        variant: "default",
+        title: "Success!",
+        description: "故事已刪除",
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   if (!data || isLoading) {
     return <StoryLoader />;
   }
@@ -203,6 +238,7 @@ const Story = () => {
           backgroundRepeat: "no-repeat",
         }}
       >
+        <Toaster />
         <div className="flex w-full items-center bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08] px-10 py-4">
           <Image
             src={"/iMagicNationIcon.png"}
@@ -288,6 +324,38 @@ const Story = () => {
                   </div>
                 </DialogContent>
               </Dialog>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    className="inline-block h-16 w-48 cursor-pointer self-start rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08] transition duration-150 ease-out hover:scale-105"
+                    style={{
+                      background:
+                        "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+                      boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                    }}
+                  >
+                    刪除故事
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="border-[#DD524C] bg-[#DD524C] ">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>確定要刪除故事嗎？</AlertDialogTitle>
+                    <AlertDialogDescription className="text-[#000000]">
+                      刪除後將永遠無法復原
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>取消</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => {
+                        deleteStoryMutate();
+                      }}
+                    >
+                      刪除
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
               <Button
                 className="inline-block h-16 w-48 cursor-pointer self-start rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08] transition duration-150 ease-out hover:scale-105"
                 style={{
@@ -391,7 +459,6 @@ const Story = () => {
           </Form>
         </div>
       </div>
-      <Toaster />
     </>
   );
 };

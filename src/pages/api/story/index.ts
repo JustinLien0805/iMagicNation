@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { db } from "@/db/index";
-import { stories, content } from "@/db/schema";
+import { stories, content, messages } from "@/db/schema";
 import { eq, isNull, or, and } from "drizzle-orm";
 
 export default async function handler(
@@ -107,5 +107,14 @@ export default async function handler(
       if (!story) return res.status(200).json({ message: "找不到故事" });
       return res.status(200).json(completeStory);
     }
+  }
+  if (method === "DELETE") {
+    const storyId = req.query.storyId as string;
+    console.log(storyId);
+    const deleteMessages = await db
+      .delete(messages)
+      .where(and(eq(messages.storyId, storyId), eq(messages.authorId, userId)));
+    console.log(deleteMessages);
+    return res.status(200).json({ message: "刪除成功" });
   }
 }
