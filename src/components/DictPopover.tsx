@@ -114,7 +114,7 @@ const CustomPopover = ({ word }: { word: string }) => {
       </PopoverTrigger>
       <PopoverContent className="border-0 bg-transparent p-0">
         <Card className="border-2 border-[#EAA916] bg-gradient-to-t from-[#411A08] to-[#572813] text-[#F6E0C1]">
-          {isLoading && <SyncLoader color="#F6E0C1" className="p-6 " />}
+          {isLoading && <SyncLoader color="#F6E0C1" className="p-6" />}
           {isSuccess && (
             <>
               <CardHeader>

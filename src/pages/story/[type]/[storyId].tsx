@@ -19,6 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import Chat from "@/components/Chat";
 import * as z from "zod";
@@ -45,6 +46,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Copy, Check } from "lucide-react";
 
 type Story = {
   id: number;
@@ -79,6 +81,16 @@ const Story = () => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const [url, setUrl] = useState<string>("");
+  const [hasCopied, setHasCopied] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setHasCopied(false);
+    }, 2000);
+  }, [hasCopied]);
+  async function copyToClipboardWithMeta(value: string) {
+    navigator.clipboard.writeText(value);
+  }
 
   const getStory = async () => {
     const { data }: { data: Story } = await axios.get("/api/story", {
@@ -304,21 +316,44 @@ const Story = () => {
                       {downloadStoryError && "影片生成失敗"}
                     </DialogDescription>
                   </DialogHeader>
-                  <div>
+                  <div className="flex w-full flex-col gap-4">
                     {downloadStoryLoading && (
                       <p className="flex items-center gap-4">
                         <ScaleLoader color="#F6E0C1" /> 影片生成中...
                       </p>
                     )}
                     {isSuccess && (
-                      <Button
-                        asChild
-                        className="w-full bg-[#F6E0C1] text-[#411A08]"
-                      >
-                        <a href={url} download>
-                          下載影片
-                        </a>
-                      </Button>
+                      <>
+                        <div className="flex w-full items-center justify-between rounded-lg border p-2">
+                          <ScrollArea className="w-[300px] whitespace-nowrap rounded-lg">
+                            {url}
+                          </ScrollArea>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-6 w-6 text-[#F6E0C1] hover:bg-[#F6E0C1] hover:text-[#411A08]"
+                            onClick={() => {
+                              copyToClipboardWithMeta(url);
+                              setHasCopied(true);
+                            }}
+                          >
+                            <span className="sr-only">Copy</span>
+                            {hasCopied ? (
+                              <Check className="h-3 w-3" />
+                            ) : (
+                              <Copy className="h-3 w-3" />
+                            )}
+                          </Button>
+                        </div>
+                        <Button
+                          asChild
+                          className="w-full bg-[#F6E0C1] text-[#411A08]"
+                        >
+                          <a href={url} download>
+                            下載影片
+                          </a>
+                        </Button>
+                      </>
                     )}
                     {downloadStoryError && <p>影片生成失敗</p>}
                   </div>
