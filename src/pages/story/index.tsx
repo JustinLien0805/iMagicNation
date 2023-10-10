@@ -7,6 +7,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 import { UserNav } from "@/components/UserNav";
 import { Button } from "@/components/ui/button";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 interface Story {
   id: string;
   initDialog: string;
@@ -17,11 +20,33 @@ interface Story {
 }
 const Library = () => {
   const router = useRouter();
+  const { toast } = useToast();
   const fetchList = async (): Promise<Story[]> => {
     const { data }: { data: Story[] } = await axios.post("/api/story");
     return data;
   };
-  const { data, isSuccess, isLoading } = useQuery(["storyList"], fetchList);
+  const { data, isSuccess, isLoading } = useQuery(["storyList"], fetchList, {
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Oops!",
+        description: "載入故事失敗",
+        action: (
+          <ToastAction
+            altText="Try again"
+            onClick={() => {
+              router.reload();
+            }}
+          >
+            重新載入
+          </ToastAction>
+        ),
+      });
+    },
+    onSettled: (data) => {
+      console.log(data);
+    },
+  });
 
   // Extract the first four words of a string
   const getFirstFourWords = (str: string) => {
@@ -40,17 +65,17 @@ const Library = () => {
   return (
     <>
       <div className="flex min-h-screen flex-col bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08]">
-        <div className="flex items-center p-4 px-10">
-          <Image
-            src={"/iMagicNationIcon.png"}
-            className="mr-auto cursor-pointer"
-            width={420}
-            height={80}
-            alt=""
-            onClick={() => {
-              router.push("/");
-            }}
-          />
+        <div className="relative flex w-full items-center justify-end bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08] px-10 py-4">
+          <div className="absolute left-10 top-5 aspect-[5/1] h-16">
+            <Image
+              src={"/iMagicNationIcon.png"}
+              alt=""
+              fill
+              onClick={() => {
+                router.push("/");
+              }}
+            />
+          </div>
           <UserNav />
         </div>
         <div
@@ -161,6 +186,7 @@ const Library = () => {
             })}
         </div>
       </div>
+      <Toaster />
     </>
   );
 };

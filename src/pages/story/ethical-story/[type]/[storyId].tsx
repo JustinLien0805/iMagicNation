@@ -87,17 +87,17 @@ const EthicalStory = () => {
         backgroundRepeat: "repeat",
       }}
     >
-      <div className="flex w-full items-center bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08] px-10 py-4">
-        <Image
-          src={"/iMagicNationIcon.png"}
-          className="mr-auto cursor-pointer"
-          width={420}
-          height={80}
-          alt=""
-          onClick={() => {
-            router.push("/");
-          }}
-        />
+      <div className="relative flex w-full items-center justify-end bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08] px-10 py-4">
+        <div className="absolute left-10 top-5 aspect-[5/1] h-16 cursor-pointer">
+          <Image
+            src={"/iMagicNationIcon.png"}
+            alt=""
+            fill
+            onClick={() => {
+              router.push("/");
+            }}
+          />
+        </div>
         <UserNav />
       </div>
       <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-10">
@@ -106,10 +106,10 @@ const EthicalStory = () => {
             className="flex h-full flex-1 snap-y snap-mandatory flex-col gap-8 overflow-y-scroll"
             ref={chatContainerRef}
           >
-            <div className="flex h-full w-full gap-4">
+            <div className="flex h-full w-full flex-col gap-4 lg:flex-row">
               <img
                 src={data.imageSrc}
-                className="h-96 w-96 flex-shrink-0 rounded-lg bg-[#F6E0C1] object-cover"
+                className="h-96 w-96 flex-shrink-0 self-center rounded-lg bg-[#F6E0C1] object-cover lg:self-start"
               />
               <div className="flex w-full gap-4 p-4">
                 <div className="relative h-8 w-8 flex-shrink-0">

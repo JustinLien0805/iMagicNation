@@ -66,13 +66,16 @@ const EthicDialog = ({
         </Button>
       </DialogTrigger>
       <EthicDialogContent>
-        <Image
-          src={"/iMagicNationIcon.png"}
-          alt=""
-          className="absolute left-4 top-4 cursor-pointer"
-          width={420}
-          height={80}
-        />
+        <div className="absolute left-10 top-5 aspect-[5/1] h-16 cursor-pointer">
+          <Image
+            src={"/iMagicNationIcon.png"}
+            alt=""
+            fill
+            onClick={() => {
+              router.push("/");
+            }}
+          />
+        </div>
         <div className="flex w-full">
           <div className="flex grow flex-col items-center justify-center space-y-8">
             <DialogHeader>

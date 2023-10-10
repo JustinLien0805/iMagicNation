@@ -17,13 +17,16 @@ const Home = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <Image
-        src={"/iMagicNationIcon.png"}
-        alt="iMagicNationIcon"
-        className="absolute left-10 top-4 cursor-pointer"
-        width={420}
-        height={80}
-      />
+      <div className="absolute left-10 top-5 aspect-[5/1] h-16 cursor-pointer">
+        <Image
+          src={"/iMagicNationIcon.png"}
+          alt=""
+          fill
+          onClick={() => {
+            router.push("/");
+          }}
+        />
+      </div>
       <div className="absolute right-10 top-4 flex flex-col items-center space-y-4">
         <UserNav />
         <motion.div

@@ -9,7 +9,7 @@ const StoryLoader = () => {
   const router = useRouter();
   return (
     <div
-      className="flex h-screen flex-col justify-start overflow-hidden bg-[#411A08]"
+      className="flex h-screen flex-col items-center overflow-x-hidden bg-[#411A08]"
       style={{
         backgroundImage: 'url("/LibraryBackground.png")',
         backgroundSize: "cover",
@@ -17,24 +17,24 @@ const StoryLoader = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="flex w-full items-center bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08] px-10 py-4">
-        <Image
-          src={"/iMagicNationIcon.png"}
-          className="mr-auto cursor-pointer"
-          width={420}
-          height={80}
-          alt=""
-          onClick={() => {
-            router.push("/");
-          }}
-        />
+      <div className="flex w-full items-center justify-end bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08] px-10 py-4">
+        <div className="absolute left-10 top-5 aspect-[5/1] h-16 cursor-pointer">
+          <Image
+            src={"/iMagicNationIcon.png"}
+            alt=""
+            fill
+            onClick={() => {
+              router.push("/");
+            }}
+          />
+        </div>
         <UserNav />
       </div>
-      <div className="flex flex-col items-center justify-center gap-4 p-10">
+      <div className="flex h-full w-4/5 max-w-[80rem] flex-col items-center justify-center gap-4 p-10">
         <div className="flex w-full gap-8 rounded-lg bg-[#411A08] p-10">
-          <div className="flex h-96 flex-1 snap-y snap-mandatory flex-col gap-8 overflow-y-scroll">
-            <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start gap-4">
-              <Skeleton className="max-h-96 w-96 flex-shrink-0 rounded-lg bg-[#F6E0C1]" />
+          <div className="flex h-full flex-1 snap-y snap-mandatory flex-col gap-8 overflow-y-scroll">
+            <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start flex-col gap-4 lg:flex-row">
+              <Skeleton className="h-96 w-96 flex-shrink-0 self-center rounded-lg bg-[#F6E0C1] lg:self-center" />
               <div className="flex w-full flex-col">
                 <div className="flex h-40 w-full flex-shrink-0 flex-row-reverse gap-4 border-b-2 border-[#EAA916] p-4">
                   <div className="relative h-8 w-8">

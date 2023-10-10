@@ -18,7 +18,7 @@ const CategoryRow = ({ type, storys }: CategoryRowProps) => {
   return (
     <div className="w-full rounded-lg border-2 border-[#EAA916] bg-gradient-to-t from-[#411A08] to-[#572813] px-4 pt-4 text-white">
       <h2
-        className="inline-block cursor-pointer rounded-lg border-4 border-[#411A08] px-2 py-3 text-xl font-semibold tracking-wide text-[#411A08]"
+        className="inline-block min-w-[10rem] cursor-pointer rounded-lg border-4 border-[#411A08] px-2 py-3 text-center text-xl font-semibold tracking-wide text-[#411A08]"
         style={{
           background:
             "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
@@ -30,7 +30,7 @@ const CategoryRow = ({ type, storys }: CategoryRowProps) => {
       <div className="mb-4 flex items-center gap-4 overflow-y-hidden overflow-x-scroll">
         {storys.map((story) => (
           <motion.div
-            className="z-10 flex cursor-pointer flex-col items-center text-xl font-semibold tracking-wide text-[#F6E0C1]"
+            className="z-10 flex cursor-pointer min-w-fit flex-col items-center text-xl font-semibold tracking-wide text-[#F6E0C1]"
             key={story.id}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

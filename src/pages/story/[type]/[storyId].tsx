@@ -251,21 +251,22 @@ const Story = () => {
         }}
       >
         <Toaster />
-        <div className="flex w-full items-center bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08] px-10 py-4">
-          <Image
-            src={"/iMagicNationIcon.png"}
-            className="mr-auto cursor-pointer"
-            width={420}
-            height={80}
-            alt=""
-            onClick={() => {
-              router.push("/");
-            }}
-          />
+        <div className="relative flex w-full items-center justify-end bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08] px-10 py-4">
+          <div className="absolute left-10 top-5 aspect-[5/1] h-16 cursor-pointer">
+            <Image
+              src={"/iMagicNationIcon.png"}
+              alt=""
+              fill
+              onClick={() => {
+                router.push("/");
+              }}
+            />
+          </div>
           <UserNav />
         </div>
-        <div className="flex w-[80rem] flex-col items-center justify-center gap-4 p-10">
-          <div className="flex w-full items-center justify-between">
+        <div className="flex h-full max-w-[80rem] flex-col items-center justify-center gap-4 p-10">
+          {/* buttons */}
+          <div className="flex w-full flex-col items-start justify-between gap-4 lg:flex-row">
             <button
               className="relative inline-block h-16 min-w-[20rem] cursor-default rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08]"
               style={{
@@ -406,19 +407,20 @@ const Story = () => {
               </Button>
             </div>
           </div>
-          <div className="flex w-full gap-8 rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-10">
+          {/* chats */}
+          <div className="min-h-96 flex h-[60vh] w-full gap-8 rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-10">
             <div
-              className="flex h-96 flex-1 snap-y snap-mandatory flex-col gap-8 overflow-y-scroll"
+              className="flex h-full flex-1 snap-y snap-mandatory flex-col gap-8 overflow-y-scroll"
               ref={chatContainerRef}
             >
               {data.initDialog && (
-                <div className="flex h-5/6 flex-shrink-0 snap-start gap-4">
+                <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start flex-col gap-4 lg:flex-row">
                   <img
-                    className="h-full w-96 flex-shrink-0 rounded-lg bg-[#F6E0C1] object-cover"
+                    className="max-h-96 w-96 flex-shrink-0 self-center rounded-lg bg-[#F6E0C1] object-cover lg:self-start"
                     src={data.initImage}
                     alt="initImage"
                   />
-                  <div className="flex w-full gap-4 border-b-2 border-[#EAA916] p-4">
+                  <div className="flex gap-4 border-b-2 border-[#EAA916] p-4">
                     <div className="relative h-8 w-8">
                       <Image src={"/SystemJewel.png"} fill alt="SystemJewel" />
                     </div>
@@ -441,6 +443,7 @@ const Story = () => {
               {postLoading && <LoadingChat input={form.getValues().input} />}
             </div>
           </div>
+          {/* form */}
           <Form {...form}>
             <form
               className={`w-full ${
@@ -457,12 +460,13 @@ const Story = () => {
                       <FormControl>
                         <Input
                           {...field}
+                          autoComplete="off"
                           placeholder={
                             data.messages.length === 6
                               ? "故事已完結"
                               : "輸入故事內容..."
                           }
-                          className="h-full w-full border-0 bg-transparent text-3xl text-[#F6E0C1] placeholder:text-[#f6e0c18b] focus-visible:ring-0"
+                          className="h-full w-full border-0 bg-transparent text-3xl text-[#F6E0C1] placeholder:text-[#f6e0c18b] focus-visible:ring-0 focus-visible:ring-offset-[#F6E0C1]"
                         />
                       </FormControl>
                       <FormMessage />
@@ -500,10 +504,10 @@ const Story = () => {
 
 const LoadingChat = ({ input }: { input: string }) => {
   return (
-    <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start gap-4">
-      <Skeleton className="max-h-96 w-96 flex-shrink-0 rounded-lg bg-[#F6E0C1]" />
+    <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start flex-col gap-4 lg:flex-row">
+      <Skeleton className="h-96 w-96 flex-shrink-0 self-center rounded-lg bg-[#F6E0C1] lg:self-center" />
       <div className="flex w-full flex-col">
-        <div className="flex h-40 w-full flex-shrink-0 flex-row-reverse gap-4 border-b-2 border-[#EAA916] p-4">
+        <div className="flex h-40 flex-shrink-0 flex-row-reverse gap-4 border-b-2 border-[#EAA916] p-4">
           <div className="relative h-8 w-8">
             <Image src={"/UserJewel.png"} fill alt="" />
           </div>
@@ -511,7 +515,7 @@ const LoadingChat = ({ input }: { input: string }) => {
             {input}
           </p>
         </div>
-        <div className="flex min-h-[14rem] w-full flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
+        <div className="flex min-h-[14rem] flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
           <div className="relative h-8 w-8">
             <Image src={"/SystemJewel.png"} fill alt="" />
           </div>

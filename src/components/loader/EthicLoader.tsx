@@ -17,17 +17,17 @@ const StoryLoader = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="flex w-full items-center bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08] px-10 py-4">
-        <Image
-          src={"/iMagicNationIcon.png"}
-          className="mr-auto cursor-pointer"
-          width={420}
-          height={80}
-          alt=""
-          onClick={() => {
-            router.push("/");
-          }}
-        />
+      <div className="relative flex w-full items-center justify-end bg-gradient-to-r from-[#411A08] via-[#572813] to-[#411A08] px-10 py-4">
+        <div className="absolute left-10 top-5 aspect-[5/1] h-16 cursor-pointer">
+          <Image
+            src={"/iMagicNationIcon.png"}
+            alt=""
+            fill
+            onClick={() => {
+              router.push("/");
+            }}
+          />
+        </div>
         <UserNav />
       </div>
       <div className="flex h-screen flex-col items-center justify-center gap-4 p-10">
