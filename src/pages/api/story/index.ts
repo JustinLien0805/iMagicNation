@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { db } from "@/db/index";
 import { stories, content, messages } from "@/db/schema";
-import { eq, isNull, or, and } from "drizzle-orm";
+import { eq, isNull, or, and, like } from "drizzle-orm";
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,7 +22,13 @@ export default async function handler(
         .select()
         .from(stories)
         // TODO: only get the story that user created
-        .where(or(isNull(stories.authorId), eq(stories.authorId, userId)))
+        .where(
+          or(
+            eq(stories.authorId, userId),
+            like(stories.type, `%小說%`),
+            like(stories.type, `%一上%`)
+          )
+        )
         .orderBy(stories.type);
 
       return res.status(200).json(story);
