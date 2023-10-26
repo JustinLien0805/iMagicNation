@@ -88,8 +88,47 @@ const EthicDialog = ({
             </div>
           </div>
           {type === "課綱故事" ? (
-            <div className="flex h-full w-1/2 flex-col justify-center pl-8">
-              <LectureStoryForm />
+            <div className="flex h-full w-1/2 flex-col justify-center gap-8">
+              {/* <LectureStoryForm /> */}
+              <button
+                className="inline-block w-32 cursor-pointer self-center rounded-lg border-4 border-[#411A08] px-2 py-3 text-2xl font-bold text-[#411A08] transition duration-150 ease-out hover:scale-105 lg:w-48 lg:text-3xl"
+                style={{
+                  background:
+                    "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+                  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+                onClick={() => {
+                  router.push(`/story/category/康軒`);
+                }}
+              >
+                康軒
+              </button>
+              <button
+                className="inline-block w-32 cursor-pointer self-center rounded-lg border-4 border-[#411A08] px-2 py-3 text-2xl font-bold text-[#411A08] transition duration-150 ease-out hover:scale-105 lg:w-48 lg:text-3xl"
+                style={{
+                  background:
+                    "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+                  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+                onClick={() => {
+                  router.push(`/story/category/翰林`);
+                }}
+              >
+                翰林
+              </button>
+              <button
+                className="inline-block w-32 cursor-pointer self-center rounded-lg border-4 border-[#411A08] px-2 py-3 text-2xl font-bold text-[#411A08] transition duration-150 ease-out hover:scale-105 lg:w-48 lg:text-3xl"
+                style={{
+                  background:
+                    "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+                  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+                onClick={() => {
+                  router.push(`/story/category/南一`);
+                }}
+              >
+                南一
+              </button>
             </div>
           ) : (
             <div className=" grid h-full w-1/2 grid-cols-2 flex-col justify-center gap-4 p-10 pl-8">
