@@ -45,7 +45,7 @@ const Home = () => {
         position="absolute left-[10%] top-2/3"
       />
       <EthicDialog
-        type="科技資訊與媒體素養"
+        type="資訊科技與媒體素養"
         position="absolute top-[20%] left-1/3"
       />
       <EthicDialog

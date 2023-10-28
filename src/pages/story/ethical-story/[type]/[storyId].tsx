@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import EthicLoader from "@/components/loader/EthicLoader";
 import { useRef, useState } from "react";
 import { UserNav } from "@/components/UserNav";
+import { Button } from "@/components/ui/button";
 
 type Ethic = {
   storyId: number;
@@ -33,24 +34,28 @@ const EthicalStory = () => {
   const router = useRouter();
   const [partId, setPardId] = useState<number | undefined>(1);
   const [options, setOptions] = useState<Option[]>();
-  const queryClient = useQueryClient();
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const getStory = async ({
     queryKey,
   }: {
-    queryKey: [string, string | string[] | undefined, number | undefined];
+    queryKey: [
+      string,
+      string | string[] | undefined,
+      number | undefined,
+      string | string[] | undefined
+    ];
   }) => {
-    const [_key, storyId, _partId] = queryKey;
+    const [_key, storyId, _partId, type] = queryKey;
     const { data }: { data: Ethic } = await axios.get("/api/ethic", {
-      params: { storyId: storyId, nextPartId: _partId },
+      params: { storyId: storyId, nextPartId: _partId, type: type },
     });
 
     return data;
   };
 
   const { data, isLoading } = useQuery(
-    ["story", router.query.storyId, partId],
+    ["story", router.query.storyId, partId, router.query.type],
     getStory,
     {
       onSuccess: (data) => {
@@ -79,7 +84,7 @@ const EthicalStory = () => {
   if (!data) return <div>no data</div>;
   return (
     <div
-      className="flex h-full min-h-screen flex-col items-center bg-[#411A08]"
+      className="flex h-full min-h-screen flex-col items-center gap-8 bg-[#411A08]"
       style={{
         backgroundImage: 'url("/LibraryBackground.png")',
         backgroundSize: "cover",
@@ -100,7 +105,17 @@ const EthicalStory = () => {
         </div>
         <UserNav />
       </div>
-      <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-10">
+      <Button
+        className="relative ml-10 inline-block h-16 cursor-default self-start rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08]"
+        style={{
+          background:
+            "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+          boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+        }}
+      >
+        {router.query.type}
+      </Button>
+      <div className="flex h-full w-full flex-col items-center justify-center gap-4 px-10 pb-10">
         <div className="flex h-full max-w-7xl gap-8 rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-10">
           <div
             className="flex h-full flex-1 snap-y snap-mandatory flex-col gap-8 overflow-y-scroll"

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import { db } from "@/db/index";
 import { ethic } from "@/db/schema";
-import { eq, asc } from "drizzle-orm";
+import { eq, asc, and, sql } from "drizzle-orm";
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,6 +11,7 @@ export default async function handler(
   const { userId } = getAuth(req);
   const nextPartId = req.query.nextPartId as string;
   const storyId = req.query.storyId as string;
+  const type = req.query.type as string;
   const { method } = req;
 
   if (!userId) {
@@ -30,7 +31,13 @@ export default async function handler(
       const part = await db
         .select()
         .from(ethic)
-        .where(eq(ethic.partId, parseInt(nextPartId)));
+        .where(
+          and(
+            eq(ethic.type, type),
+            eq(ethic.storyId, parseInt(storyId)),
+            eq(ethic.partId, parseInt(nextPartId))
+          )
+        );
 
       return res.status(200).json(part[0]);
     }
