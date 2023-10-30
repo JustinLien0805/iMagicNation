@@ -266,7 +266,7 @@ const Story = () => {
         </div>
         <div className="flex h-full max-w-[80rem] flex-col items-center justify-center gap-4 p-10">
           {/* buttons */}
-          <div className="flex w-full flex-col items-start justify-between gap-4 lg:flex-row">
+          <div className="mt-12 flex w-full flex-col items-start justify-between gap-4 lg:mt-0 lg:flex-row">
             <button
               className="relative inline-block h-16 min-w-[20rem] cursor-default rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08]"
               style={{
@@ -410,7 +410,7 @@ const Story = () => {
           {/* chats */}
           <div className="min-h-96 flex h-[60vh] w-full gap-8 rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-10">
             <div
-              className="flex h-full flex-1 snap-y snap-mandatory flex-col gap-8 overflow-y-scroll"
+              className="flex h-full flex-1 lg:snap-y snap-mandatory flex-col gap-8 overflow-y-scroll"
               ref={chatContainerRef}
             >
               {data.initDialog && (

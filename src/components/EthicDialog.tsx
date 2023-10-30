@@ -8,6 +8,12 @@ import {
   DialogTrigger,
   EthicDialogContent,
 } from "@/components/ui/dialog";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { clsx } from "clsx";
 import LectureStoryForm from "./form/LectureStoryForm";
@@ -90,48 +96,54 @@ const EthicDialog = ({
           {type === "課綱故事" ? (
             <div className="flex h-full w-1/2 flex-col justify-center gap-8">
               {/* <LectureStoryForm /> */}
-              <h2 className="self-center text-3xl font-bold text-[#411A08]">
-                選擇出版社
-              </h2>
-              <button
-                className="inline-block w-full cursor-pointer self-center rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08] transition duration-150 ease-out hover:scale-105 lg:w-48 lg:text-3xl"
-                style={{
-                  background:
-                    "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
-                  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
-                onClick={() => {
-                  router.push(`/story/category/康軒`);
-                }}
-              >
-                康軒
-              </button>
-              <button
-                className="inline-block w-64 cursor-pointer self-center rounded-lg border-4 border-[#411A08] px-2 py-3 text-2xl font-bold text-[#411A08] transition duration-150 ease-out hover:scale-105 lg:w-48 lg:text-3xl"
-                style={{
-                  background:
-                    "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
-                  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
-                onClick={() => {
-                  router.push(`/story/category/翰林`);
-                }}
-              >
-                翰林
-              </button>
-              <button
-                className="inline-block w-64 cursor-pointer self-center rounded-lg border-4 border-[#411A08] px-2 py-3 text-2xl font-bold text-[#411A08] transition duration-150 ease-out hover:scale-105 lg:w-48 lg:text-3xl"
-                style={{
-                  background:
-                    "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
-                  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
-                onClick={() => {
-                  router.push(`/story/category/南一`);
-                }}
-              >
-                南一
-              </button>
+              <Card className=" bg-gradient-to-t from-[#411A08] to-[#572813]">
+                <CardHeader>
+                  <CardTitle className="self-center text-3xl font-bold text-[#F6E0C1]">
+                    選擇出版社
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex justify-between">
+                  <button
+                    className="inline-block w-full cursor-pointer self-center rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08] transition duration-150 ease-out hover:scale-105 lg:w-48 lg:text-3xl"
+                    style={{
+                      background:
+                        "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+                      boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                    }}
+                    onClick={() => {
+                      router.push(`/story/category/康軒`);
+                    }}
+                  >
+                    康軒
+                  </button>
+                  <button
+                    className="inline-block w-64 cursor-pointer self-center rounded-lg border-4 border-[#411A08] px-2 py-3 text-2xl font-bold text-[#411A08] transition duration-150 ease-out hover:scale-105 lg:w-48 lg:text-3xl"
+                    style={{
+                      background:
+                        "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+                      boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                    }}
+                    onClick={() => {
+                      router.push(`/story/category/翰林`);
+                    }}
+                  >
+                    翰林
+                  </button>
+                  <button
+                    className="inline-block w-64 cursor-pointer self-center rounded-lg border-4 border-[#411A08] px-2 py-3 text-2xl font-bold text-[#411A08] transition duration-150 ease-out hover:scale-105 lg:w-48 lg:text-3xl"
+                    style={{
+                      background:
+                        "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+                      boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                    }}
+                    onClick={() => {
+                      router.push(`/story/category/南一`);
+                    }}
+                  >
+                    南一
+                  </button>
+                </CardContent>
+              </Card>
             </div>
           ) : (
             <div className=" grid h-full w-1/2 grid-cols-2 flex-col justify-center gap-4 p-10 pl-8">

@@ -105,17 +105,32 @@ const EthicalStory = () => {
         </div>
         <UserNav />
       </div>
-      <Button
-        className="relative ml-10 inline-block h-16 cursor-default self-start rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08]"
-        style={{
-          background:
-            "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
-          boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
-        }}
-      >
-        {router.query.type}
-      </Button>
       <div className="flex h-full w-full flex-col items-center justify-center gap-4 px-10 pb-10">
+        <div className="flex w-full max-w-7xl justify-between">
+          <Button
+            className="relative inline-block h-16 cursor-default self-start rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08]"
+            style={{
+              background:
+                "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+              boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            {router.query.type}
+          </Button>
+          <Button
+            className="inline-block h-16 w-48 cursor-pointer self-start rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08] transition duration-150 ease-out hover:scale-105"
+            style={{
+              background:
+                "linear-gradient(to bottom right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #DFD474 0%, #EBBE7A 25%, #E2A10E 50%) top right / 50% 50% no-repeat",
+              boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+            }}
+            onClick={() => {
+              router.push("/");
+            }}
+          >
+            回首頁
+          </Button>
+        </div>
         <div className="flex h-full max-w-7xl gap-8 rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-10">
           <div
             className="flex h-full flex-1 snap-y snap-mandatory flex-col gap-8 overflow-y-scroll"
