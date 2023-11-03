@@ -58,7 +58,7 @@ function DictTooltip({
 
     for (const word of result) {
       if (text[i] === word) {
-        tokens.push(<CustomPopover word={word} />);
+        tokens.push(<CustomPopover word={word} key={i}/>);
         matched = true;
         break;
       }

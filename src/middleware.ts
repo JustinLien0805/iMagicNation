@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { authMiddleware } from "@clerk/nextjs";
-import { a } from "drizzle-orm/column.d-aa4e525d";
 
 export default authMiddleware({
   publicRoutes: ["/signin"],

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import Carousel from "@/components/carousel";
 import {
   Form,
   FormControl,
@@ -410,7 +411,7 @@ const Story = () => {
           {/* chats */}
           <div className="min-h-96 flex h-[60vh] w-full gap-8 rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-10">
             <div
-              className="flex h-full flex-1 lg:snap-y snap-mandatory flex-col gap-8 overflow-y-scroll"
+              className="flex h-full flex-1 snap-mandatory flex-col gap-8 overflow-y-scroll lg:snap-y"
               ref={chatContainerRef}
             >
               {data.initDialog && (
@@ -440,7 +441,8 @@ const Story = () => {
                   phrases={data.phrases}
                 />
               ))}
-              {postLoading && <LoadingChat input={form.getValues().input} />}
+              {postLoading && <LoadingChat words={data.words || []} />}
+              {/* <LoadingChat words={data.words || []} /> */}
             </div>
           </div>
           {/* form */}
@@ -502,26 +504,36 @@ const Story = () => {
   );
 };
 
-const LoadingChat = ({ input }: { input: string }) => {
+const LoadingChat = ({ words }: { words: string[] }) => {
+  const getDefinitions = async () => {
+    if (words.length === 0) return [];
+    const { data } = await axios.get("/api/inquiry", {
+      params: {
+        word: words[0],
+      },
+    });
+    return data.data;
+  };
+
+  const { data } = useQuery(["definition", words], getDefinitions);
+  console.log(data);
   return (
     <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start flex-col gap-4 lg:flex-row">
-      <Skeleton className="h-96 w-96 flex-shrink-0 self-center rounded-lg bg-[#F6E0C1] lg:self-center" />
+      <Skeleton className="h-96 w-96 flex-shrink-0 self-center rounded-lg bg-[#F6E0C1] lg:self-start" />
       <div className="flex w-full flex-col">
-        <div className="flex h-40 flex-shrink-0 flex-row-reverse gap-4 border-b-2 border-[#EAA916] p-4">
-          <div className="relative h-8 w-8">
-            <Image src={"/UserJewel.png"} fill alt="" />
-          </div>
-          <p className="w-full text-right text-2xl font-bold text-[#F6E0C1]">
-            {input}
-          </p>
-        </div>
-        <div className="flex min-h-[14rem] flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
-          <div className="relative h-8 w-8">
-            <Image src={"/SystemJewel.png"} fill alt="" />
-          </div>
-          <p className="w-full text-2xl font-bold text-[#F6E0C1]">
+        <div className="flex min-h-[14rem] flex-shrink-0 flex-col gap-4 p-4">
+          <p className="flex w-full gap-4 text-2xl font-bold text-[#F6E0C1]">
+            生成中
             <SyncLoader color="#F6E0C1" />
           </p>
+          {words.length > 0 && (
+            <>
+              <h3 className="self-center text-2xl font-bold text-[#F6E0C1]">
+                本課單字
+              </h3>
+              <Carousel definitions={data} />
+            </>
+          )}
         </div>
       </div>
     </div>
