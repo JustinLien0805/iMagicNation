@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const config = {
   // Specifies the maximum allowed duration for this function to execute (in seconds)
-  maxDuration: 60,
+  maxDuration: 90,
 };
 
 export default async function handler(
