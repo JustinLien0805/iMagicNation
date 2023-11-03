@@ -1,13 +1,19 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
 import axios from "axios";
+
+export const config = {
+  // Specifies the maximum allowed duration for this function to execute (in seconds)
+  maxDuration: 60,
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { storyId, input }: { storyId: string; input: string } = req.body;
   const { userId } = getAuth(req);
-
+  console.log(userId);
   if (!userId) {
     return res.status(401).json({ message: "請先登入" });
   }
