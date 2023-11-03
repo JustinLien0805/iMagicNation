@@ -1,6 +1,10 @@
 import { NextApiResponse, NextApiRequest } from "next";
 import axios from "axios";
 import { getAuth } from "@clerk/nextjs/server";
+export const config = {
+  // Specifies the maximum allowed duration for this function to execute (in seconds)
+  maxDuration: 90,
+};
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
