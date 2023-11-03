@@ -287,7 +287,7 @@ const Story = () => {
             <div className="flex items-center gap-4">
               <Dialog>
                 <DialogTrigger asChild>
-                  {data.messages.length === 6 && (
+                  {data.messages?.length === 6 && (
                     <Button
                       className="inline-block h-16 w-48 cursor-pointer self-start rounded-lg border-4 border-[#411A08] px-2 py-3 text-3xl font-bold text-[#411A08] transition duration-150 ease-out hover:scale-105"
                       style={{

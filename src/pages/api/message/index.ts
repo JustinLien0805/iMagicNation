@@ -17,6 +17,7 @@ export default async function handler(
   if (!userId) {
     return res.status(401).json({ message: "請先登入" });
   }
+  console.log(userId);
   const API_URl =
     process.env.NEXT_PUBLIC_API_BASE_URL + "/story/callchatgpt" || "";
 
