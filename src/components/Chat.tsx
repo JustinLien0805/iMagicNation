@@ -1,5 +1,6 @@
 import Image from "next/image";
 import DictPopover from "./DictPopover";
+
 type Message = {
   storyId: string;
   id: string;
@@ -14,10 +15,12 @@ const Chat = ({
   message,
   words,
   phrases,
+  questions,
 }: {
   message: Message;
   words: string[];
   phrases: string[];
+  questions?: string;
 }) => {
   return (
     <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start flex-col gap-4 lg:flex-row">
@@ -39,7 +42,19 @@ const Chat = ({
           <div className="relative h-8 w-8">
             <Image src={"/SystemJewel.png"} fill alt="" />
           </div>
-          <DictPopover text={message.reply} wordsToHighlight={[...words]} />
+          <div className="flex w-full flex-col gap-4 text-2xl font-bold leading-10 tracking-wide text-[#F6E0C1]">
+            <DictPopover text={message.reply} wordsToHighlight={[...words]} />
+            {questions && (
+              <div className="flex flex-col gap-4 p-4 rounded-lg border-2 border-[#EAA916] bg-gradient-to-t from-[#411A08] to-[#572813] mb-10">
+                <h4>填充題</h4>
+                <p>國字：{JSON.parse(questions).words}</p>
+                <p>詞語：{JSON.parse(questions).phrases}</p>
+                <p>問題1：{JSON.parse(questions).question1}</p>
+                <p>問題2：{JSON.parse(questions).question2}</p>
+                <p>問題3：{JSON.parse(questions).question3}</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

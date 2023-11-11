@@ -89,7 +89,7 @@ export default async function handler(
               authorId: false,
               word: true,
               phrase: true,
-              blobType: true,
+              questions: true,
             },
             where: (messages) => eq(messages.authorId, userId),
           },

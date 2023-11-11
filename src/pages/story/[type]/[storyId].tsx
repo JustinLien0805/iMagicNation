@@ -69,7 +69,7 @@ type Message = {
   reply: string;
   imageSrc: string;
   createdAt: Date;
-  blobImage: Blob;
+  questions: string;
 };
 
 const formSchema = z.object({
@@ -434,12 +434,15 @@ const Story = () => {
               )}
 
               {data.messages.map((message) => (
-                <Chat
-                  message={message}
-                  key={message.id}
-                  words={data.words}
-                  phrases={data.phrases}
-                />
+                <>
+                  <Chat
+                    message={message}
+                    key={message.id}
+                    words={data.words}
+                    phrases={data.phrases}
+                    questions={message.questions}
+                  />
+                </>
               ))}
               {postLoading && <LoadingChat words={data.words || []} />}
               {/* <LoadingChat words={data.words || []} /> */}
@@ -516,7 +519,7 @@ const LoadingChat = ({ words }: { words: string[] }) => {
   };
 
   const { data } = useQuery(["definition", words], getDefinitions);
-  console.log(data);
+
   return (
     <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start flex-col gap-4 lg:flex-row">
       <Skeleton className="h-96 w-96 flex-shrink-0 self-center rounded-lg bg-[#F6E0C1] lg:self-start" />

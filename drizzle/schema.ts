@@ -41,7 +41,7 @@ export const messages = mysqlTable("messages", {
 	authorId: varchar("authorId", { length: 191 }),
 	word: text("word"),
 	phrase: text("phrase"),
-	blobImage: text("blobImage"),
+	questions: text("questions"),
 });
 
 export const stories = mysqlTable("stories", {
