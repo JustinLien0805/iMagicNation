@@ -428,6 +428,7 @@ const Story = () => {
                     <DictPopover
                       text={data.initDialog}
                       wordsToHighlight={[...data.words]}
+                      phrasesToHighlight={[...data.phrases]}
                     />
                   </div>
                 </div>

@@ -43,9 +43,6 @@ const Library = () => {
         ),
       });
     },
-    onSettled: (data) => {
-      console.log(data);
-    },
   });
 
   // Extract the first four words of a string

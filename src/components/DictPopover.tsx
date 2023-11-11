@@ -38,9 +38,11 @@ type Definition = {
 function DictTooltip({
   text,
   wordsToHighlight,
+  phrasesToHighlight = [],
 }: {
   text: string;
   wordsToHighlight: string[];
+  phrasesToHighlight?: string[];
 }) {
   if (wordsToHighlight.length === 0)
     return (
@@ -48,7 +50,19 @@ function DictTooltip({
         {text}
       </section>
     );
-  let result = wordsToHighlight[0].split(" ");
+  const wordsSet = wordsToHighlight[0].split(" ");
+  const phrasesSet = phrasesToHighlight[0].split(" ");
+
+  console.log(wordsSet);
+  console.log(phrasesSet);
+
+  // 處理詞組高亮
+  phrasesToHighlight.forEach((phrase) => {
+    text = text.replace(
+      new RegExp(phrase, "g"),
+      (match) => `<CustomPopover word="${match}" />`
+    );
+  });
 
   const tokens = [];
   let i = 0;
@@ -56,11 +70,25 @@ function DictTooltip({
   while (i < text.length) {
     let matched = false;
 
-    for (const word of result) {
-      if (text[i] === word) {
-        tokens.push(<CustomPopover word={word} key={i} />);
+    // 檢查是否是詞組的一部分
+    for (const phrase of phrasesSet) {
+      if (text.substring(i, i + phrase.length) === phrase) {
+        console.log(phrase);
+        tokens.push(<CustomPopover word={phrase} key={i + phrase} />);
+        i += phrase.length;
         matched = true;
         break;
+      }
+    }
+
+    // 如果不是詞組的一部分，則檢查單字
+    if (!matched) {
+      for (const word of wordsSet) {
+        if (text[i] === word) {
+          tokens.push(<CustomPopover word={word} key={i + word} />);
+          matched = true;
+          break;
+        }
       }
     }
 

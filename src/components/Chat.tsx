@@ -43,9 +43,13 @@ const Chat = ({
             <Image src={"/SystemJewel.png"} fill alt="" />
           </div>
           <div className="flex w-full flex-col gap-4 text-2xl font-bold leading-10 tracking-wide text-[#F6E0C1]">
-            <DictPopover text={message.reply} wordsToHighlight={[...words]} />
+            <DictPopover
+              text={message.reply}
+              wordsToHighlight={[...words]}
+              phrasesToHighlight={[...phrases]}
+            />
             {questions && (
-              <div className="flex flex-col gap-4 p-4 rounded-lg border-2 border-[#EAA916] bg-gradient-to-t from-[#411A08] to-[#572813] mb-10">
+              <div className="mb-10 flex flex-col gap-4 rounded-lg border-2 border-[#EAA916] bg-gradient-to-t from-[#411A08] to-[#572813] p-4">
                 <h4>填充題</h4>
                 <p>國字：{JSON.parse(questions).words}</p>
                 <p>詞語：{JSON.parse(questions).phrases}</p>

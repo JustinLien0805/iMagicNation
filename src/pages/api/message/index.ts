@@ -13,7 +13,7 @@ export default async function handler(
 ) {
   const { storyId, input }: { storyId: string; input: string } = req.body;
   const { userId } = getAuth(req);
-  console.log(userId);
+
   if (!userId) {
     return res.status(401).json({ message: "請先登入" });
   }
@@ -34,7 +34,8 @@ export default async function handler(
         },
       }
     );
-
+    if (postMessage.data.result)
+      return res.status(400).json({ message: "失敗" });
     return res.status(200).json({ message: "成功", data: postMessage.data });
   } catch (e) {
     console.log(e);
