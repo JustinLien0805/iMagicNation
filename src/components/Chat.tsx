@@ -1,5 +1,8 @@
 import Image from "next/image";
 import DictPopover from "./DictPopover";
+import { Volume2, Pause } from "lucide-react";
+import axios from "axios";
+import { useState, useRef } from "react";
 
 type Message = {
   storyId: string;
@@ -22,6 +25,50 @@ const Chat = ({
   phrases: string[];
   questions?: string;
 }) => {
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const tts = async (text: string) => {
+    // If audio is already playing, pause it
+    if (isPlaying) {
+      audioRef.current?.pause();
+      setIsPlaying(false);
+      return;
+    }
+
+    // If there's already an audio element, just play it
+    if (audioRef.current) {
+      audioRef.current.play();
+      setIsPlaying(true);
+      return;
+    }
+
+    // Otherwise, fetch the new audio and play it
+    try {
+      const response = await axios.get("/api/audio", {
+        params: { text },
+        responseType: "arraybuffer",
+      });
+
+      const blob = new Blob([response.data], { type: "audio/mpeg" });
+      const url = URL.createObjectURL(blob);
+
+      // Create a new audio element and play it
+      const audio = new Audio(url);
+      audio.play();
+      audioRef.current = audio;
+      setIsPlaying(true);
+
+      // Cleanup the object URL when the sound has finished playing
+      audio.addEventListener("ended", () => {
+        URL.revokeObjectURL(url);
+        audioRef.current = null;
+        setIsPlaying(false);
+      });
+    } catch (error) {
+      console.error("Error fetching or playing audio:", error);
+    }
+  };
   return (
     <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start flex-col gap-4 lg:flex-row">
       <img
@@ -39,8 +86,33 @@ const Chat = ({
           </p>
         </div>
         <div className="flex min-h-[14rem] flex-shrink-0 gap-4 border-b-2 border-[#EAA916] p-4">
-          <div className="relative h-8 w-8">
-            <Image src={"/SystemJewel.png"} fill alt="" />
+          <div className="flex flex-col gap-4">
+            <div className="relative h-8 w-8">
+              <Image src={"/SystemJewel.png"} fill alt="" />
+            </div>
+            <div className="cursor-pointer text-[#f6e0c189] hover:text-[#f6e0c1]">
+              {isPlaying ? (
+                <>
+                  <Pause
+                    className="h-8 w-8"
+                    onClick={() => {
+                      tts(message.reply);
+                    }}
+                  />
+                  <p>暫停</p>
+                </>
+              ) : (
+                <>
+                  <Volume2
+                    className="h-8 w-8"
+                    onClick={() => {
+                      tts(message.reply);
+                    }}
+                  />
+                  <p>播放</p>
+                </>
+              )}
+            </div>
           </div>
           <div className="flex w-full flex-col gap-4 text-2xl font-bold leading-10 tracking-wide text-[#F6E0C1]">
             <DictPopover
