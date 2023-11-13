@@ -3,6 +3,8 @@ import DictPopover from "./DictPopover";
 import { Volume2, Pause } from "lucide-react";
 import axios from "axios";
 import { useState, useRef } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 
 type Message = {
   storyId: string;
@@ -69,6 +71,19 @@ const Chat = ({
       console.error("Error fetching or playing audio:", error);
     }
   };
+
+  const { mutate, isLoading } = useMutation(
+    ["audio", message.reply],
+    tts,
+    {
+      onSuccess: () => {
+        console.log("Feedback sent");
+      },
+      onError: () => {
+        console.error("Error sending feedback");
+      },
+    }
+  );
   return (
     <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start flex-col gap-4 lg:flex-row">
       <img
@@ -90,29 +105,32 @@ const Chat = ({
             <div className="relative h-8 w-8">
               <Image src={"/SystemJewel.png"} fill alt="" />
             </div>
-            <div className="cursor-pointer text-[#f6e0c189] hover:text-[#f6e0c1]">
-              {isPlaying ? (
+            <button
+              className="flex cursor-pointer flex-col items-center text-[#f6e0c189] hover:text-[#f6e0c1]"
+              disabled={isLoading}
+              onClick={() => {
+                mutate(message.reply);
+              }}
+            >
+              {!(isPlaying || isLoading) && (
                 <>
-                  <Pause
-                    className="h-8 w-8"
-                    onClick={() => {
-                      tts(message.reply);
-                    }}
-                  />
-                  <p>暫停</p>
-                </>
-              ) : (
-                <>
-                  <Volume2
-                    className="h-8 w-8"
-                    onClick={() => {
-                      tts(message.reply);
-                    }}
-                  />
+                  <Volume2 className="h-8 w-8" />
                   <p>播放</p>
                 </>
               )}
-            </div>
+              {isLoading && (
+                <>
+                  <Volume2 className="h-8 w-8 text-[#f6e0c1]" />
+                  <p>準備中</p>
+                </>
+              )}
+              {isPlaying && (
+                <>
+                  <Pause className="h-8 w-8 text-[#f6e0c1]" />
+                  <p>暫停</p>
+                </>
+              )}
+            </button>
           </div>
           <div className="flex w-full flex-col gap-4 text-2xl font-bold leading-10 tracking-wide text-[#F6E0C1]">
             <DictPopover

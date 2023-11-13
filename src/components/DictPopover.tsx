@@ -148,13 +148,14 @@ const CustomPopover = ({ word }: { word: string }) => {
               <CardHeader>
                 <CardTitle className="text-2xl">{definition?.title}</CardTitle>
                 <CardDescription className="text-[#f6e0c189]">
-                  注音：{definition?.concise_dict.heteronyms[0].bopomofo} <br />
-                  部首：{definition?.concise_dict.radical}
+                  注音：{definition?.concise_dict?.heteronyms[0]?.bopomofo}
+                  <br />
+                  部首：{definition?.concise_dict?.radical}
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-xl">
                 <p>
-                  {definition?.concise_dict.heteronyms[0].definitions[0].def}
+                  {definition?.concise_dict?.heteronyms[0]?.definitions[0]?.def}
                 </p>
               </CardContent>
             </>

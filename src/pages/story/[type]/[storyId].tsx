@@ -101,7 +101,7 @@ const Story = () => {
     return data;
   };
 
-  const { data, isLoading, refetch } = useQuery(
+  const { data, isLoading, refetch, isRefetching } = useQuery(
     ["story", router.query.storyId],
     getStory,
     {
@@ -445,8 +445,9 @@ const Story = () => {
                   />
                 </>
               ))}
-              {postLoading && <LoadingChat words={data.words || []} />}
-              {/* <LoadingChat words={data.words || []} /> */}
+              {(postLoading || isRefetching) && (
+                <LoadingChat words={data.words || []} />
+              )}
             </div>
           </div>
           {/* form */}
@@ -530,7 +531,7 @@ const LoadingChat = ({ words }: { words: string[] }) => {
             生成中
             <SyncLoader color="#F6E0C1" />
           </p>
-          {words.length > 0 && (
+          {data && words.length > 0 && (
             <>
               <h3 className="self-center text-2xl font-bold text-[#F6E0C1]">
                 本課單字
