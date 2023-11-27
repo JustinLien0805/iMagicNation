@@ -476,6 +476,7 @@ const Story = () => {
                           e.preventDefault();
                           takeSuggestion(e.currentTarget.textContent || "");
                         }}
+                        key={suggestion}
                       >
                         {suggestion}
                       </div>
