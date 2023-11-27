@@ -70,6 +70,7 @@ type Message = {
   imageSrc: string;
   createdAt: Date;
   questions: string;
+  suggestions: string;
 };
 
 const formSchema = z.object({
@@ -137,6 +138,10 @@ const Story = () => {
       chatContainerRef.current.scrollTop =
         chatContainerRef.current.scrollHeight;
     }
+  };
+
+  const takeSuggestion = (suggestion: string) => {
+    form.setValue("input", suggestion);
   };
 
   const postMessage = async (formData: z.infer<typeof formSchema>) => {
@@ -243,7 +248,7 @@ const Story = () => {
   return (
     <>
       <div
-        className="flex h-screen flex-col items-center overflow-x-hidden bg-[#411A08]"
+        className="flex min-h-screen flex-col items-center overflow-x-hidden bg-[#411A08]"
         style={{
           backgroundImage: 'url("/LibraryBackground.png")',
           backgroundSize: "cover",
@@ -409,7 +414,7 @@ const Story = () => {
             </div>
           </div>
           {/* chats */}
-          <div className="min-h-96 flex h-[60vh] w-full gap-8 rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-10">
+          <div className="min-h-96 flex h-[60vh] w-full gap-8 rounded-lg border-4 border-[#EAA916] bg-[#411A08] p-8">
             <div
               className="flex h-full flex-1 snap-mandatory flex-col gap-8 overflow-y-scroll lg:snap-y"
               ref={chatContainerRef}
@@ -453,53 +458,69 @@ const Story = () => {
           {/* form */}
           <Form {...form}>
             <form
-              className={`w-full ${
+              className={`flex w-full ${
                 data.messages.length === 10 ? "hidden" : "flex"
               }`}
               onSubmit={form.handleSubmit(onSubmit)}
             >
-              <div className="flex h-32 w-full items-center space-x-4 rounded-lg border-4 border-[#EAA916] bg-[#411A08] bg-gradient-to-t from-[#411A08] to-[#572813] p-2">
-                <FormField
-                  control={form.control}
-                  name="input"
-                  render={({ field }) => (
-                    <FormItem className="h-16 w-full">
-                      <FormControl>
-                        <Input
-                          {...field}
-                          autoComplete="off"
-                          placeholder={
-                            data.messages.length === 6
-                              ? "故事已完結"
-                              : "輸入故事內容..."
-                          }
-                          className="h-full w-full border-0 bg-transparent text-3xl text-[#F6E0C1] placeholder:text-[#f6e0c18b] focus-visible:ring-0 focus-visible:ring-offset-[#F6E0C1]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  asChild
-                  className="h-16 w-16 cursor-pointer bg-transparent"
-                >
-                  <motion.button
-                    disabled={
-                      postLoading ||
-                      form.getValues().input === "" ||
-                      data.messages.length === 6
-                    }
-                    style={{
-                      backgroundImage: 'url("/SendBtn.png")',
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      backgroundRepeat: "no-repeat",
-                    }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+              <div className="flex w-full flex-col items-center gap-4 rounded-lg border-4 border-[#EAA916] bg-[#411A08] bg-gradient-to-t from-[#411A08] to-[#572813] p-4 text-[#F6E0C1]">
+                <section className="grid w-full grid-cols-2 gap-4">
+                  {data.messages.length > 0 &&
+                    data.messages[data.messages.length - 1].suggestions &&
+                    JSON.parse(
+                      data.messages[data.messages.length - 1].suggestions
+                    ).suggestions.map((suggestion: string) => (
+                      <div
+                        className="cursor-pointer rounded-lg border-2 border-[#f6e0c18b] bg-[#411A08] bg-gradient-to-t from-[#411A08] to-[#572813] p-2 text-[#f6e0c18b] hover:border-[#F6E0C1] hover:text-[#F6E0C1]"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          takeSuggestion(e.currentTarget.textContent || "");
+                        }}
+                      >
+                        {suggestion}
+                      </div>
+                    ))}
+                </section>
+                <div className="flex w-full gap-4">
+                  <FormField
+                    control={form.control}
+                    name="input"
+                    render={({ field }) => (
+                      <FormItem className="h-16 w-full">
+                        <FormControl>
+                          <Input
+                            {...field}
+                            autoComplete="off"
+                            placeholder={
+                              data.messages.length === 6
+                                ? "故事已完結"
+                                : "輸入故事內容..."
+                            }
+                            className="h-full w-full border border-[#f6e0c18b] bg-transparent text-3xl text-[#F6E0C1] placeholder:text-[#f6e0c18b] focus-visible:ring-0 focus-visible:ring-offset-[#F6E0C1]"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </Button>
+                  <Button
+                    asChild
+                    className="h-16 w-16 cursor-pointer bg-transparent"
+                  >
+                    <motion.button
+                      type="submit"
+                      disabled={postLoading || data.messages.length === 6}
+                      style={{
+                        backgroundImage: 'url("/SendBtn.png")',
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    />
+                  </Button>
+                </div>
               </div>
             </form>
           </Form>

@@ -74,7 +74,9 @@ function DictTooltip({
     for (const phrase of phrasesSet) {
       if (text.substring(i, i + phrase.length) === phrase) {
         console.log(phrase);
-        tokens.push(<CustomPopover word={phrase} key={i + phrase} />);
+        tokens.push(
+          <CustomPopover word={phrase} key={i + phrase} isWord={false} />
+        );
         i += phrase.length;
         matched = true;
         break;
@@ -85,7 +87,9 @@ function DictTooltip({
     if (!matched) {
       for (const word of wordsSet) {
         if (text[i] === word) {
-          tokens.push(<CustomPopover word={word} key={i + word} />);
+          tokens.push(
+            <CustomPopover word={word} key={i + word} isWord={true} />
+          );
           matched = true;
           break;
         }
@@ -107,7 +111,7 @@ function DictTooltip({
 
 export default DictTooltip;
 
-const CustomPopover = ({ word }: { word: string }) => {
+const CustomPopover = ({ word, isWord }: { word: string; isWord: boolean }) => {
   const [definition, setDefinition] = useState<DictionaryEntry>();
   const getDefinition = async (word: string) => {
     const { data } = await axios.get("/api/inquiry", {
@@ -132,7 +136,9 @@ const CustomPopover = ({ word }: { word: string }) => {
     <Popover>
       <PopoverTrigger asChild>
         <span
-          className="cursor-pointer border-b-2 border-cyan-500"
+          className={`cursor-pointer border-b-2 ${
+            isWord ? "border-cyan-500" : "border-violet-500"
+          }`}
           onClick={() => {
             mutate(word);
           }}

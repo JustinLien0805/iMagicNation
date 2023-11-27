@@ -4,7 +4,6 @@ import { Volume2, Pause } from "lucide-react";
 import axios from "axios";
 import { useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
 
 type Message = {
   storyId: string;
@@ -72,18 +71,14 @@ const Chat = ({
     }
   };
 
-  const { mutate, isLoading } = useMutation(
-    ["audio", message.reply],
-    tts,
-    {
-      onSuccess: () => {
-        console.log("Feedback sent");
-      },
-      onError: () => {
-        console.error("Error sending feedback");
-      },
-    }
-  );
+  const { mutate, isLoading } = useMutation(["audio", message.reply], tts, {
+    onSuccess: () => {
+      console.log("Feedback sent");
+    },
+    onError: () => {
+      console.error("Error sending feedback");
+    },
+  });
   return (
     <div className="flex min-h-[24rem] w-full flex-shrink-0 snap-start flex-col gap-4 lg:flex-row">
       <img
@@ -140,9 +135,13 @@ const Chat = ({
             />
             {questions && (
               <div className="mb-10 flex flex-col gap-4 rounded-lg border-2 border-[#EAA916] bg-gradient-to-t from-[#411A08] to-[#572813] p-4">
-                <h4>填充題</h4>
-                <p>國字：{JSON.parse(questions).words}</p>
-                <p>詞語：{JSON.parse(questions).phrases}</p>
+                <h4>填充題: 答案在下面的國字及詞語中</h4>
+                <p className="text-cyan-500">
+                  國字：{JSON.parse(questions).words}
+                </p>
+                <p className="text-violet-500">
+                  詞語：{JSON.parse(questions).phrases}
+                </p>
                 <p>問題1：{JSON.parse(questions).question1}</p>
                 <p>問題2：{JSON.parse(questions).question2}</p>
                 <p>問題3：{JSON.parse(questions).question3}</p>

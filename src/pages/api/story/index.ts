@@ -90,6 +90,7 @@ export default async function handler(
               word: true,
               phrase: true,
               questions: true,
+              suggestions: true,
             },
             where: (messages) => eq(messages.authorId, userId),
           },

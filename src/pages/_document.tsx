@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         <meta name="theme-color" content="#411A08" />
       </Head>
-      <body>
+      <body className="bg-[#F6E0C1]">
         <Main />
         <NextScript />
       </body>

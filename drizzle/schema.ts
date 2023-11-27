@@ -42,6 +42,7 @@ export const messages = mysqlTable("messages", {
 	word: text("word"),
 	phrase: text("phrase"),
 	questions: text("questions"),
+	suggestions: text("suggestions"),
 });
 
 export const stories = mysqlTable("stories", {
