@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <ClerkProvider {...pageProps}>
           <QueryClientProvider client={queryClient}>
             <Component {...pageProps} />
-            <ReactQueryDevtools />
+            {/* <ReactQueryDevtools /> */}
           </QueryClientProvider>
         </ClerkProvider>
       </div>

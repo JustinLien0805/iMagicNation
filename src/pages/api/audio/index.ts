@@ -29,9 +29,9 @@ export default async function handler(
   try {
     const mp3 = await openai.audio.speech.create({
       model: "tts-1",
-      voice: "nova",
+      voice: "echo",
       input: text,
-      speed: 1.25,
+      speed: 1,
     });
 
     const buffer = Buffer.from(await mp3.arrayBuffer());
